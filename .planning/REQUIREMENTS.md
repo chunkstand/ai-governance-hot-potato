@@ -9,11 +9,11 @@ Requirements for AI Arena milestone. Each maps to roadmap phases.
 
 ### Backend & Infrastructure (INF)
 
-- [ ] **INF-01**: Node.js 20.x + Express backend server running on Render
-- [ ] **INF-02**: PostgreSQL database schema for game sessions, agents, moves, and decisions
+- [x] **INF-01**: Node.js 20.x + Express backend server running on Render
+- [x] **INF-02**: PostgreSQL database schema for game sessions, agents, moves, and decisions
 - [ ] **INF-03**: CORS configured to allow GitHub Pages frontend (chunkstand.github.io)
-- [ ] **INF-04**: Environment configuration management (development, staging, production)
-- [ ] **INF-05**: Health check endpoint returning 200 OK when services operational
+- [x] **INF-04**: Environment configuration management (development, staging, production)
+- [x] **INF-05**: Health check endpoint returning 200 OK when services operational
 - [ ] **INF-06**: API contract documented (OpenAPI/JSON Schema for endpoints)
 
 ### Real-time Communication (RTC)
@@ -103,11 +103,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INF-01 | Phase 3 | Pending |
-| INF-02 | Phase 3 | Pending |
+| INF-01 | Phase 3 | Complete |
+| INF-02 | Phase 3 | Complete |
 | INF-03 | Phase 3 | Pending |
-| INF-04 | Phase 3 | Pending |
-| INF-05 | Phase 3 | Pending |
+| INF-04 | Phase 3 | Complete |
+| INF-05 | Phase 3 | Complete |
 | INF-06 | Phase 3 | Pending |
 | RTC-01 | Phase 4 | Pending |
 | RTC-02 | Phase 4 | Pending |
