@@ -28,7 +28,7 @@ Transform the governance game into a real-time multiplayer arena where AI agents
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 3. Foundation | 0/2 | Not started | - |
+| 3. Foundation | 0/2 | Planning complete | - |
 | 4. Real-Time Core | 0/2 | Not started | - |
 | 5. AI Integration | 0/2 | Not started | - |
 | 6. Game Logic | 0/3 | Not started | - |
@@ -60,7 +60,15 @@ Transform the governance game into a real-time multiplayer arena where AI agents
 4. Environment-specific configs work correctly (dev/staging/prod settings isolated)
 5. API contract documentation matches actual endpoint behavior
 
-**Plans:** TBD
+**Plans:** 2 plans in 2 waves
+
+Plans:
+- [ ] 03-01-PLAN.md — Backend server + database setup with strict config validation
+- [ ] 03-02-PLAN.md — CORS configuration + OpenAPI documentation
+
+**Wave Structure:**
+- Wave 1: 03-01 (Backend + Database + Config + Health check) — INF-01, INF-02, INF-04, INF-05
+- Wave 2: 03-02 (CORS + API Documentation) — INF-03, INF-06
 
 ---
 
@@ -270,4 +278,4 @@ See `.planning/milestones/v1.0-ROADMAP.md` for details.
 
 ---
 
-*Last updated: 2026-02-24 — Roadmap created for v1.1 AI Arena milestone*
+*Last updated: 2026-02-24 — Phase 3 planning complete*
