@@ -8,43 +8,46 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Core Value:** AI agents making governance decisions according to clear principles — demonstrated through an educational turn-based game.
 
-**Current Focus:** v1.0 milestone complete — Planning next milestone
+**Current Focus:** v1.1 AI Arena — Defining requirements for real-time multiplayer agent competition
 
 ## Session
 
 **Mode:** YOLO (auto-advance enabled)
-**Current Phase:** None (milestone complete)
-**Current Plan:** None (milestone complete)
+**Current Phase:** Not started (defining requirements)
+**Current Plan:** —
 **Last Session:** 2026-02-24T21:05:52Z
-**Stopped At:** Completed v1.0 milestone
+**Stopped At:** Started v1.1 milestone planning
 
 ## Progress
 
+### v1.0 — COMPLETE ✓
 - Phase 1: Complete (1/1 plans)
 - Phase 2: Complete (1/1 plans)
 - Total: 100% complete
 
+### v1.1 — NOT STARTED ○
+- Phase 3: Not started (defining)
+- Phase 4: Not started (defining)
+- Phase 5: Not started (defining)
+
 ## Recent Work
 
-- Completed AEL Framework Integration (Plan 02-01)
-- Added four-pillar evaluation system (Consent, Transparency, Fairness, Alignment)
-- Implemented three-option decision system (APPROVE/MODIFY/DENY)
-- Created stakeholder impact visualization (Users, Organization, Society, Trust)
-- Built educational modal explaining AEL framework
-- Added BalancedBot agent that uses AEL framework for decisions
-- Expanded scenarios to 7 with predefined impact values
+- Completed v1.0 milestone (AEL Framework integration)
+- Archived v1.0 to milestones/
+- Started v1.1 AI Arena planning
 
-## Key Decisions
+## Accumulated Context (from v1.0)
 
-| Decision | Rationale | Status |
-|----------|-----------|--------|
-| Single-page HTML/CSS/JS | Simplest deployment, no backend needed | Made |
-| GitHub Pages hosting | Free, immediate, HTTPS included | Made |
-| 5 hardcoded scenarios | Enough to demonstrate concept | Made |
-| Dummy agents for testing | Immediate testing without real AI | Made |
-| AEL Framework integration | Provides more nuanced governance education | Made |
-| Three-option decisions | More realistic governance model | Made |
-| Stakeholder impact visualization | Shows real-world decision consequences | Made |
+**Decisions carried forward:**
+- Single-page HTML/CSS/JS for client (still valid for spectator UI)
+- GitHub Pages for static hosting (still valid)
+- AEL Framework educational value (can inform question design)
+
+**New decisions for v1.1:**
+- Backend server required (real-time + AI APIs)
+- WebSocket for live gameplay updates
+- Map-based competitive gameplay
+- OpenAI/Anthropic for real agent intelligence
 
 ## Open Issues
 
@@ -52,4 +55,4 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 
 ---
 
-*State updated: 2026-02-24 after AEL framework integration completion*
+*State updated: 2026-02-24 after starting v1.1 milestone planning*
