@@ -150,6 +150,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 - Mapped to phases: 38
 - Unmapped: 0 ✓
 
+**Phase Summary:**
+- Phase 3 (Foundation): 6 requirements — INF-01 through INF-06
+- Phase 4 (Real-Time Core): 7 requirements — RTC-01 through RTC-07
+- Phase 5 (AI Integration): 8 requirements — AI-01 through AI-08
+- Phase 6 (Game Logic): 10 requirements — GM-01 through GM-10
+- Phase 7 (Spectator Experience): 10 requirements — UX-01 through UX-10
+
 ---
 *Requirements defined: 2026-02-24*
-*Last updated: 2026-02-24 after v1.1 research synthesis*
+*Last updated: 2026-02-24 after roadmap creation for v1.1 AI Arena*
