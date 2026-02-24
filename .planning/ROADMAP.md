@@ -7,7 +7,7 @@
 
 | Phase | Status | Plans | Progress |
 |-------|--------|-------|----------|
-| 1 | ○ | 1/1 | 0% |
+| 1 | ● | 1/1 | 100% |
 
 ## Phase 1: MVP Launch
 
@@ -24,7 +24,7 @@
 6. Landing page explains the concept
 
 **Plans:**
-- [ ] 01-01-PLAN.md — Build and deploy MVP
+- [x] 01-01-PLAN.md — Build and deploy MVP
 
 ---
 
@@ -43,4 +43,4 @@ All 19 v1 requirements are covered in this single phase.
 ---
 
 *Roadmap created: 2026-02-23*
-*Last updated: 2026-02-23 after initial roadmap*
+*Last updated: 2026-02-24 after MVP launch*
