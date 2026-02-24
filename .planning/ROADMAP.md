@@ -7,7 +7,8 @@
 
 | Phase | Status | Plans | Progress |
 |-------|--------|-------|----------|
-| 1 | ● | 1/1 | 100% |
+| 1 | ✓ | 1/1 | 100% |
+| 2 | ✓ | 1/1 | 100% |
 
 ## Phase 1: MVP Launch
 
@@ -26,21 +27,49 @@
 **Plans:**
 - [x] 01-01-PLAN.md — Build and deploy MVP
 
+## Phase 2: Enhanced Version - AEL Framework
+
+**Goal:** Transform the game into a comprehensive educational tool using the AEL (Automated Experience Lifecycle) framework
+
+**Requirements:** Enhanced gameplay with AEL four pillars, three-option decisions, stakeholder impact visualization
+
+**Success Criteria:**
+1. Four AEL pillar evaluation sliders with real-time calculation
+2. Three-option decision system (APPROVE/MODIFY/DENY) working correctly
+3. Stakeholder impact visualization showing Users, Organization, Society, Trust
+4. Educational content about AEL framework
+5. Enhanced AI agents using AEL for nuanced decisions
+6. Expanded scenarios with impact values
+
+**Plans:**
+- [x] 02-01-PLAN.md — AEL Framework Integration
+
 ---
 
 ## Plan Details
 
 ### Phase 1: MVP Launch
 
-This single-phase roadmap covers everything needed to launch:
+This phase covers the initial launch:
 - Game interface (HTML/CSS/JS)
 - Game logic (turns, scenarios, decisions)
 - Agent integration (webhooks, demo agents)
 - Deployment (GitHub Pages, domain)
 
-All 19 v1 requirements are covered in this single phase.
+All 19 v1 requirements are covered in this phase.
+
+### Phase 2: Enhanced Version - AEL Framework
+
+This phase transforms the game into an educational tool:
+- AEL Framework four pillars (User Consent, Transparency, Fairness, Alignment)
+- Three-option decision system with modification interface
+- Stakeholder impact visualization with color-coded bars
+- Educational modal explaining governance concepts
+- BalancedBot agent that intelligently uses AEL framework
+- Expanded scenarios (5 → 7) with predefined impacts
+- Cumulative impact tracking across game session
 
 ---
 
 *Roadmap created: 2026-02-23*
-*Last updated: 2026-02-24 after MVP launch*
+*Last updated: 2026-02-24 after AEL framework integration*
