@@ -36,7 +36,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Root endpoint - API info
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (_req: Request, res: Response) => {
   res.json({
     name: 'AI Governance Arena API',
     version: '1.1.0',
@@ -51,7 +51,7 @@ app.use('/health', healthRouter);
 // app.use('/api/agents', agentRouter); // To be added in future tasks
 
 // 404 handler - must be before error handler
-app.use((req: Request, res: Response) => {
+app.use((_req: Request, res: Response) => {
   res.status(404).json({ error: 'Endpoint not found' });
 });
 

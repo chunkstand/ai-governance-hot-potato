@@ -14,7 +14,7 @@ const router = Router();
  * This endpoint is used by Render for automatic health monitoring
  * and auto-rollback on deployment failure.
  */
-router.get('/', async (req, res) => {
+router.get('/', async (_req, res) => {
   try {
     // Test database connectivity with a simple query
     await prisma.$queryRaw`SELECT 1`;

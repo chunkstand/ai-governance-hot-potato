@@ -38,7 +38,7 @@ export class ApiError extends Error {
  */
 export function errorHandler(
   err: Error | ApiError,
-  req: Request,
+  _req: Request,
   res: Response,
   _next: NextFunction
 ): void {

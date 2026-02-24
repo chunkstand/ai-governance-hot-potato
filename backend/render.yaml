@@ -1,0 +1,67 @@
+# Render Blueprint Configuration
+# This file defines infrastructure-as-code for Render deployment
+# Import this file into Render Dashboard to create services automatically
+
+services:
+  # Staging environment - auto-deploys on git push
+  - type: web
+    name: ai-arena-backend-staging
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build && npx prisma migrate deploy && npx prisma generate
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: staging
+      - key: PORT
+        value: 3000
+      - key: CORS_ORIGIN
+        value: https://chunkstand.github.io
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ai-arena-db-staging
+          property: connectionString
+      - key: OPENAI_API_KEY
+        sync: false  # Set manually in dashboard
+      - key: ANTHROPIC_API_KEY
+        sync: false  # Set manually in dashboard
+
+  # Production environment - manual deploy only
+  - type: web
+    name: ai-arena-backend-prod
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build && npx prisma migrate deploy && npx prisma generate
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: false  # Manual deploy for production safety
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: CORS_ORIGIN
+        value: https://chunkstand.github.io
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ai-arena-db-prod
+          property: connectionString
+      - key: OPENAI_API_KEY
+        sync: false  # Set manually in dashboard
+      - key: ANTHROPIC_API_KEY
+        sync: false  # Set manually in dashboard
+
+databases:
+  # Staging database
+  - name: ai-arena-db-staging
+    databaseName: aiarena_staging
+    user: aiarena
+    plan: free
+
+  # Production database
+  - name: ai-arena-db-prod
+    databaseName: aiarena_prod
+    user: aiarena
+    plan: free
