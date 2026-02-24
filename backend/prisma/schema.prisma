@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model GameSession {
+  id          String    @id @default(uuid())
+  status      String    // INIT, AWAITING_ANSWERS, PROCESSING, RESOLVED, FINISHED
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  finishedAt  DateTime?
+  agents      Agent[]
+  moves       Move[]
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Agent {
+  id            String      @id @default(uuid())
+  name          String
+  type          String      // AI, HUMAN, DEMO_STRICT, DEMO_LENIENT, DEMO_BALANCED
+  color         String      // hex color for UI (e.g., "#FF5733")
+  position      Int         @default(0)
+  score         Int         @default(0)
+  gameSessionId String
+  gameSession   GameSession @relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
+  decisions     Decision[]
+  moves         Move[]
+  createdAt     DateTime    @default(now())
+
+  @@index([gameSessionId])
+  @@index([type])
+}
+
+model Decision {
+  id          String   @id @default(uuid())
+  questionId  String
+  answer      String   // A, B, C, D
+  reasoning   String   @db.Text
+  timeMs      Int      // time to answer in milliseconds
+  isCorrect   Boolean?
+  agentId     String
+  agent       Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@index([agentId])
+  @@index([questionId])
+}
+
+model Move {
+  id            String      @id @default(uuid())
+  fromPosition  Int
+  toPosition    Int
+  spacesMoved   Int
+  agentId       String
+  agent         Agent       @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  gameSessionId String
+  gameSession   GameSession @relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+
+  @@index([agentId])
+  @@index([gameSessionId])
+}
