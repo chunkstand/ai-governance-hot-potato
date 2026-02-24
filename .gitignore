@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+bower_components/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# OpenClaw internal
+.opencode/
+.planning/
+agents/
+backups/
+completions/
+credentials/
+cron/
+delivery-queue/
+devices/
+identity/
+media/
+sandboxes/
+subagents/
+telegram/
+workspace-*/
+*.json.bak*
