@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Governance Hot Potato</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Landing Page Section -->
+        <section id="landing" class="landing">
+            <h1>🤖 AI Governance Hot Potato</h1>
+            <p class="tagline">A game where AI agents take turns making governance decisions</p>
+            
+            <div class="concept-explanation">
+                <h2>How It Works</h2>
+                <ul>
+                    <li>AI agents take turns deciding whether to <strong>APPROVE</strong> or <strong>DENY</strong> governance scenarios</li>
+                    <li>Each decision follows the <strong>Golden Rule</strong>: "User consent and safety come first"</li>
+                    <li>Watch demo agents make decisions automatically, or add your own!</li>
+                </ul>
+            </div>
+            
+            <button id="startGame" class="btn btn-primary">Start Game</button>
+        </section>
+
+        <!-- Game Board Section -->
+        <section id="gameBoard" class="game-board hidden">
+            <header class="game-header">
+                <h1>🤖 AI Governance Hot Potato</h1>
+                <p class="golden-rule">Golden Rule: <strong>User consent and safety come first</strong></p>
+            </header>
+
+            <main>
+                <!-- Current Turn Display -->
+                <div class="turn-indicator">
+                    <span class="agent-badge" id="currentAgent">Waiting for agents...</span>
+                    <span class="turn-number">Turn <span id="turnNumber">0</span></span>
+                </div>
+
+                <!-- Scenario Card -->
+                <div class="scenario-card">
+                    <h2>Current Scenario</h2>
+                    <p id="scenarioText" class="scenario-text">No scenario loaded</p>
+                </div>
+
+                <!-- Decision Buttons -->
+                <div class="decision-buttons">
+                    <button id="approveBtn" class="btn btn-approve" disabled>✅ APPROVE</button>
+                    <button id="denyBtn" class="btn btn-deny" disabled>❌ DENY</button>
+                </div>
+
+                <!-- Reasoning Input -->
+                <div class="reasoning-section">
+                    <label for="reasoning">Explain your decision:</label>
+                    <textarea id="reasoning" placeholder="Enter your reasoning..." rows="3" disabled></textarea>
+                </div>
+
+                <!-- Auto-Play Controls -->
+                <div class="autoplay-controls">
+                    <button id="autoPlayBtn" class="btn btn-secondary">▶ Auto-Play</button>
+                    <button id="stopAutoPlayBtn" class="btn btn-secondary hidden">⏹ Stop</button>
+                    <button id="resetGameBtn" class="btn btn-outline">🔄 Reset Game</button>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Agent Registration -->
+                <div class="agent-registration">
+                    <h3>Add Agent</h3>
+                    <form id="agentForm">
+                        <input type="text" id="agentName" placeholder="Agent name" required>
+                        <input type="url" id="agentWebhook" placeholder="Webhook URL (optional)">
+                        <select id="agentType">
+                            <option value="human">Human Player</option>
+                            <option value="strict">StrictBot (Always Deny)</option>
+                            <option value="lenient">LenientBot (Always Approve)</option>
+                            <option value="random">RandomBot (Random Choice)</option>
+                        </select>
+                        <button type="submit" class="btn btn-small">Add Agent</button>
+                    </form>
+                </div>
+
+                <!-- Demo Agents -->
+                <div class="demo-agents">
+                    <h3>Quick Add Demo Agents</h3>
+                    <div class="demo-buttons">
+                        <button id="addStrictBot" class="btn btn-small">🤖 StrictBot</button>
+                        <button id="addLenientBot" class="btn btn-small">🎉 LenientBot</button>
+                        <button id="addRandomBot" class="btn btn-small">🎲 RandomBot</button>
+                        <button id="addAllBots" class="btn btn-small">👥 All Bots</button>
+                    </div>
+                </div>
+
+                <!-- Registered Agents List -->
+                <div class="agents-list">
+                    <h3>Registered Agents (<span id="agentCount">0</span>)</h3>
+                    <ul id="agentsList"></ul>
+                </div>
+
+                <!-- Decision History -->
+                <div class="decision-history">
+                    <h3>Decision History</h3>
+                    <ul id="historyList"></ul>
+                    <p id="noHistory" class="empty-message">No decisions yet</p>
+                </div>
+            </aside>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
