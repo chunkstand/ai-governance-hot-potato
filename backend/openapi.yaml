@@ -1,0 +1,701 @@
+openapi: 3.0.3
+info:
+  title: AI Governance Arena API
+  description: |
+    Backend API for AI Governance Arena - a real-time multiplayer game where AI agents compete
+    by answering governance questions according to the AEL (Automated Experience Lifecycle) framework.
+    
+    ## Features
+    - Game session management
+    - AI agent registration and tracking
+    - Real-time game state via WebSocket (Phase 4)
+    - Spectator viewing endpoints
+    
+    ## Authentication
+    No authentication required for v1.1. Future versions may add API key authentication.
+    
+  version: 1.1.0
+  contact:
+    name: AgentGameworks
+    url: https://github.com/chunkstand/ai-governance-hot-potato
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+  - url: https://ai-arena-backend-staging.onrender.com
+    description: Staging server
+  - url: https://ai-arena-backend-prod.onrender.com
+    description: Production server
+
+tags:
+  - name: Health
+    description: Server and database health monitoring
+  - name: Documentation
+    description: API documentation and specification
+  - name: Game Sessions
+    description: Game session lifecycle management
+  - name: Agents
+    description: Agent management within game sessions
+
+paths:
+  /health:
+    get:
+      summary: Health check endpoint
+      description: |
+        Returns the current health status of the API server and database connection.
+        Used by Render for automatic health monitoring and auto-rollback on deployment failure.
+      operationId: getHealth
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Server and database are operational
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+              example:
+                status: "ok"
+                database: "connected"
+                timestamp: "2026-02-24T15:30:00.000Z"
+        '503':
+          description: Service unavailable - database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+              example:
+                status: "error"
+                database: "disconnected"
+                error: "Connection terminated unexpectedly"
+                timestamp: "2026-02-24T15:30:00.000Z"
+
+  /docs:
+    get:
+      summary: API documentation (Swagger UI)
+      description: |
+        Serves interactive API documentation using Swagger UI.
+        Allows testing API endpoints directly from the browser.
+      operationId: getDocs
+      tags:
+        - Documentation
+      responses:
+        '200':
+          description: Swagger UI HTML page
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /openapi.json:
+    get:
+      summary: OpenAPI specification (JSON)
+      description: Returns the raw OpenAPI 3.0 specification as JSON
+      operationId: getOpenApiSpec
+      tags:
+        - Documentation
+      responses:
+        '200':
+          description: OpenAPI specification
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /api/sessions:
+    get:
+      summary: List active game sessions
+      description: |
+        Retrieves a list of game sessions with optional filtering.
+        Returns session summaries including status, agent count, and creation time.
+      operationId: listSessions
+      tags:
+        - Game Sessions
+      parameters:
+        - name: status
+          in: query
+          description: Filter sessions by status
+          schema:
+            type: string
+            enum: [INIT, AWAITING_ANSWERS, PROCESSING, RESOLVED, FINISHED]
+          example: INIT
+        - name: limit
+          in: query
+          description: Maximum number of sessions to return (default 10, max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          example: 10
+      responses:
+        '200':
+          description: List of game sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameSessionSummary'
+              example:
+                - id: "550e8400-e29b-41d4-a716-446655440000"
+                  status: "INIT"
+                  agentCount: 4
+                  createdAt: "2026-02-24T15:30:00.000Z"
+                  updatedAt: "2026-02-24T15:30:00.000Z"
+                - id: "550e8400-e29b-41d4-a716-446655440001"
+                  status: "AWAITING_ANSWERS"
+                  agentCount: 3
+                  createdAt: "2026-02-24T15:25:00.000Z"
+                  updatedAt: "2026-02-24T15:28:00.000Z"
+        '400':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Invalid status value. Must be one of: INIT, AWAITING_ANSWERS, PROCESSING, RESOLVED, FINISHED"
+
+    post:
+      summary: Create new game session
+      description: |
+        Creates a new game session with the specified mode and agents.
+        For demo mode, agents are automatically configured with predefined types.
+        For AI mode, agents will use LLM APIs for decision making.
+      operationId: createSession
+      tags:
+        - Game Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGameSessionInput'
+            examples:
+              demoMode:
+                summary: Demo mode with 4 agents
+                value:
+                  mode: "demo"
+                  agents:
+                    - name: "StrictBot"
+                      type: "DEMO_STRICT"
+                      color: "#FF4444"
+                    - name: "LenientBot"
+                      type: "DEMO_LENIENT"
+                      color: "#44FF44"
+                    - name: "BalancedBot"
+                      type: "DEMO_BALANCED"
+                      color: "#4444FF"
+                    - name: "RandomBot"
+                      type: "AI"
+                      color: "#FFAA00"
+              aiMode:
+                summary: AI mode with 2 agents
+                value:
+                  mode: "ai"
+                  agents:
+                    - name: "GPT-4 Agent"
+                      type: "AI"
+                      color: "#9B59B6"
+      responses:
+        '201':
+          description: Game session created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameSession'
+              example:
+                id: "550e8400-e29b-41d4-a716-446655440000"
+                status: "INIT"
+                mode: "demo"
+                agents:
+                  - id: "550e8400-e29b-41d4-a716-446655440001"
+                    name: "StrictBot"
+                    type: "DEMO_STRICT"
+                    color: "#FF4444"
+                    position: 0
+                    score: 0
+                    createdAt: "2026-02-24T15:30:00.000Z"
+                createdAt: "2026-02-24T15:30:00.000Z"
+                updatedAt: "2026-02-24T15:30:00.000Z"
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingAgents:
+                  summary: Missing agents array
+                  value:
+                    error: "Validation failed"
+                    details:
+                      - field: "agents"
+                        message: "At least one agent is required"
+                invalidMode:
+                  summary: Invalid mode value
+                  value:
+                    error: "Validation failed"
+                    details:
+                      - field: "mode"
+                        message: "Mode must be 'demo' or 'ai'"
+
+  /api/sessions/{id}:
+    get:
+      summary: Get game session by ID
+      description: |
+        Retrieves a complete game session including all agents, moves, and decisions.
+        Use this endpoint to get the full game state for spectator viewing.
+      operationId: getSession
+      tags:
+        - Game Sessions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Game session UUID
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '200':
+          description: Game session details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameSession'
+        '404':
+          description: Game session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Game session not found"
+        '400':
+          description: Invalid session ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Invalid session ID format. Expected UUID."
+
+    delete:
+      summary: End/delete a game session
+      description: |
+        Permanently deletes a game session and all associated agents, moves, and decisions.
+        This action is irreversible.
+      operationId: deleteSession
+      tags:
+        - Game Sessions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Game session UUID
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '204':
+          description: Game session deleted successfully
+        '404':
+          description: Game session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Game session not found"
+
+  /api/sessions/{id}/start:
+    post:
+      summary: Start a game session
+      description: |
+        Transitions a game session from INIT status to AWAITING_ANSWERS.
+        Once started, agents can begin answering questions.
+      operationId: startSession
+      tags:
+        - Game Sessions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Game session UUID
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '200':
+          description: Game session started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameSession'
+              example:
+                id: "550e8400-e29b-41d4-a716-446655440000"
+                status: "AWAITING_ANSWERS"
+                mode: "demo"
+                agents: []
+                createdAt: "2026-02-24T15:30:00.000Z"
+                updatedAt: "2026-02-24T15:32:00.000Z"
+        '400':
+          description: Cannot start session (wrong status)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Cannot start session. Current status: AWAITING_ANSWERS"
+        '404':
+          description: Game session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Game session not found"
+
+  /api/sessions/{id}/agents:
+    get:
+      summary: List agents in a session
+      description: Retrieves all agents registered in a specific game session
+      operationId: listAgents
+      tags:
+        - Agents
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Game session UUID
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '200':
+          description: List of agents in the session
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Agent'
+        '404':
+          description: Game session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      required:
+        - status
+        - timestamp
+      properties:
+        status:
+          type: string
+          enum: [ok, error]
+          description: Overall health status
+          example: "ok"
+        database:
+          type: string
+          enum: [connected, disconnected]
+          description: Database connection status
+          example: "connected"
+        error:
+          type: string
+          description: Error message when status is 'error'
+          example: "Connection terminated unexpectedly"
+        timestamp:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp of the health check
+          example: "2026-02-24T15:30:00.000Z"
+
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Game session not found"
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: "agents"
+              message:
+                type: string
+                example: "At least one agent is required"
+
+    GameSession:
+      type: object
+      required:
+        - id
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique session identifier
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        status:
+          type: string
+          enum: [INIT, AWAITING_ANSWERS, PROCESSING, RESOLVED, FINISHED]
+          description: Current game session status
+          example: "INIT"
+        mode:
+          type: string
+          enum: [demo, ai]
+          description: Game mode
+          example: "demo"
+        agents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Agent'
+          description: List of agents in the session
+        moves:
+          type: array
+          items:
+            $ref: '#/components/schemas/Move'
+          description: List of moves made in the session
+        createdAt:
+          type: string
+          format: date-time
+          description: Session creation timestamp
+          example: "2026-02-24T15:30:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2026-02-24T15:30:00.000Z"
+        finishedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: Session completion timestamp
+          example: null
+
+    GameSessionSummary:
+      type: object
+      required:
+        - id
+        - status
+        - agentCount
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        status:
+          type: string
+          enum: [INIT, AWAITING_ANSWERS, PROCESSING, RESOLVED, FINISHED]
+          example: "INIT"
+        agentCount:
+          type: integer
+          description: Number of agents in the session
+          example: 4
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-02-24T15:30:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-02-24T15:30:00.000Z"
+
+    CreateGameSessionInput:
+      type: object
+      required:
+        - mode
+        - agents
+      properties:
+        mode:
+          type: string
+          enum: [demo, ai]
+          description: Game mode - demo uses predefined agents, ai uses LLM APIs
+          example: "demo"
+        agents:
+          type: array
+          minItems: 1
+          maxItems: 8
+          items:
+            $ref: '#/components/schemas/CreateAgentInput'
+          description: List of agents to create (1-8 agents)
+
+    CreateAgentInput:
+      type: object
+      required:
+        - name
+        - type
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: Agent display name
+          example: "StrictBot"
+        type:
+          type: string
+          enum: [AI, HUMAN, DEMO_STRICT, DEMO_LENIENT, DEMO_BALANCED]
+          description: Agent type determining decision-making behavior
+          example: "DEMO_STRICT"
+        color:
+          type: string
+          pattern: '^#[0-9A-Fa-f]{6}$'
+          description: Hex color code for UI representation
+          example: "#FF4444"
+
+    Agent:
+      type: object
+      required:
+        - id
+        - name
+        - type
+        - position
+        - score
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440001"
+        name:
+          type: string
+          example: "StrictBot"
+        type:
+          type: string
+          enum: [AI, HUMAN, DEMO_STRICT, DEMO_LENIENT, DEMO_BALANCED]
+          example: "DEMO_STRICT"
+        color:
+          type: string
+          example: "#FF4444"
+        position:
+          type: integer
+          minimum: 0
+          description: Current position on the game map
+          example: 0
+        score:
+          type: integer
+          description: Current score based on AEL framework
+          example: 0
+        gameSessionId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        decisions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Decision'
+        moves:
+          type: array
+          items:
+            $ref: '#/components/schemas/Move'
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-02-24T15:30:00.000Z"
+
+    Decision:
+      type: object
+      required:
+        - id
+        - questionId
+        - answer
+        - reasoning
+        - timeMs
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440002"
+        questionId:
+          type: string
+          description: Reference to the governance question
+          example: "q-001"
+        answer:
+          type: string
+          enum: [A, B, C, D]
+          description: Selected answer choice
+          example: "B"
+        reasoning:
+          type: string
+          description: Agent's reasoning for the decision
+          example: "This decision prioritizes user consent and safety, aligning with the AEL framework."
+        timeMs:
+          type: integer
+          description: Time taken to answer in milliseconds
+          example: 2500
+        isCorrect:
+          type: boolean
+          nullable: true
+          description: Whether the answer was correct (null for subjective questions)
+          example: true
+        agentId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440001"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-02-24T15:31:00.000Z"
+
+    Move:
+      type: object
+      required:
+        - id
+        - fromPosition
+        - toPosition
+        - spacesMoved
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440003"
+        fromPosition:
+          type: integer
+          description: Starting position
+          example: 0
+        toPosition:
+          type: integer
+          description: Ending position
+          example: 2
+        spacesMoved:
+          type: integer
+          description: Number of spaces advanced
+          example: 2
+        agentId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440001"
+        gameSessionId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-02-24T15:32:00.000Z"

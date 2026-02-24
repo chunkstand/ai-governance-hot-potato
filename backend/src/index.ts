@@ -6,6 +6,7 @@ import { errorHandler } from './middleware/errorHandler';
 import { healthRouter } from './routes/health';
 import { corsMiddleware } from './middleware/cors';
 import { apiRouter } from './routes/api';
+import { docsRouter } from './routes/docs';
 
 // Validate configuration before starting server
 // This implements fail-fast behavior - server refuses to start with invalid config
@@ -47,6 +48,8 @@ app.get('/', (_req: Request, res: Response) => {
 // Routes
 app.use('/health', healthRouter);
 app.use('/api', apiRouter);
+app.use('/docs', docsRouter);
+app.use('/openapi.json', docsRouter);
 
 // 404 handler - must be before error handler
 app.use((_req: Request, res: Response) => {
