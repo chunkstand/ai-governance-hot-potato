@@ -20,7 +20,7 @@
 
 ### Milestone: v1.1 AI Arena
 
-**Status:** ✅ Phase 3 complete, ready for Phase 4
+**Status:** Milestone complete
 
 **Completed:**
 - v1.0 MVP shipped to GitHub Pages (2026-02-24)
