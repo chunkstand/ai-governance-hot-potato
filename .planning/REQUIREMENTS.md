@@ -11,10 +11,10 @@ Requirements for AI Arena milestone. Each maps to roadmap phases.
 
 - [x] **INF-01**: Node.js 20.x + Express backend server running on Render
 - [x] **INF-02**: PostgreSQL database schema for game sessions, agents, moves, and decisions
-- [ ] **INF-03**: CORS configured to allow GitHub Pages frontend (chunkstand.github.io)
+- [x] **INF-03**: CORS configured to allow GitHub Pages frontend (chunkstand.github.io)
 - [x] **INF-04**: Environment configuration management (development, staging, production)
 - [x] **INF-05**: Health check endpoint returning 200 OK when services operational
-- [ ] **INF-06**: API contract documented (OpenAPI/JSON Schema for endpoints)
+- [x] **INF-06**: API contract documented (OpenAPI/JSON Schema for endpoints)
 
 ### Real-time Communication (RTC)
 
