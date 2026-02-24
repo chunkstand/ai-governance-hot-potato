@@ -1,10 +1,11 @@
 import express, { Request, Response } from 'express';
 import helmet from 'helmet';
 import compression from 'compression';
-import cors from 'cors';
 import { config, validateConfig } from './config/index';
 import { errorHandler } from './middleware/errorHandler';
 import { healthRouter } from './routes/health';
+import { corsMiddleware } from './middleware/cors';
+import { apiRouter } from './routes/api';
 
 // Validate configuration before starting server
 // This implements fail-fast behavior - server refuses to start with invalid config
@@ -22,11 +23,9 @@ const app = express();
 // Security middleware
 app.use(helmet());
 
-// Enable CORS for frontend
-app.use(cors({
-  origin: config.corsOrigin,
-  credentials: true
-}));
+// CORS middleware - must be before routes
+// Handles preflight OPTIONS and sets CORS headers for GitHub Pages frontend
+app.use(corsMiddleware);
 
 // Compression middleware
 app.use(compression());
@@ -47,8 +46,7 @@ app.get('/', (_req: Request, res: Response) => {
 
 // Routes
 app.use('/health', healthRouter);
-// app.use('/api/sessions', sessionRouter); // To be added in future tasks
-// app.use('/api/agents', agentRouter); // To be added in future tasks
+app.use('/api', apiRouter);
 
 // 404 handler - must be before error handler
 app.use((_req: Request, res: Response) => {
