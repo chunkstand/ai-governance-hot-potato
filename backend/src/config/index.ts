@@ -9,7 +9,7 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env') });
  * All required fields must be present for the application to start
  */
 export interface Config {
-  nodeEnv: 'development' | 'staging' | 'production';
+  nodeEnv: 'development' | 'staging' | 'production' | 'test';
   port: number;
   databaseUrl: string; // REQUIRED - no default
   corsOrigin: string; // REQUIRED - no default
@@ -44,15 +44,15 @@ function validateDatabaseUrl(url: string): void {
 /**
  * Validates NODE_ENV is one of the allowed values
  */
-function validateNodeEnv(env: string): 'development' | 'staging' | 'production' {
-  const allowedEnvs = ['development', 'staging', 'production'];
+function validateNodeEnv(env: string): 'development' | 'staging' | 'production' | 'test' {
+  const allowedEnvs = ['development', 'staging', 'production', 'test'];
   if (!allowedEnvs.includes(env)) {
     throw new Error(
       `NODE_ENV must be one of: ${allowedEnvs.join(', ')}\n` +
       `Current value: ${env}`
     );
   }
-  return env as 'development' | 'staging' | 'production';
+  return env as 'development' | 'staging' | 'production' | 'test';
 }
 
 /**
