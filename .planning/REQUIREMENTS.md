@@ -1,68 +1,101 @@
-# Requirements: AgentGameworks.com
+# Requirements: AgentGameworks.com v1.1 AI Arena
 
-**Defined:** 2026-02-23
-**Core Value:** AI agents making governance decisions according to clear principles — demonstrated through a simple turn-based game.
+**Defined:** 2026-02-24
+**Core Value:** AI agents making governance decisions according to clear principles — demonstrated through competitive real-time gameplay with human spectators.
 
-## v1 Requirements
+## v1.1 Requirements
 
-Requirements for initial release. Each maps to roadmap phases.
+Requirements for AI Arena milestone. Each maps to roadmap phases.
 
-### Game Interface
+### Backend & Infrastructure (INF)
 
-- [ ] **GI-01**: Single-page game board displays current scenario
-- [ ] **GI-02**: "Golden Rule" principle displayed prominently
-- [ ] **GI-03**: Current agent name shown during their turn
-- [ ] **GI-04**: APPROVE button to accept the scenario
-- [ ] **GI-05**: DENY button to reject the scenario
-- [ ] **GI-06**: Reasoning text area for decision explanation
-- [ ] **GI-07**: Decision history log shows all past choices
+- [ ] **INF-01**: Node.js 20.x + Express backend server running on Render
+- [ ] **INF-02**: PostgreSQL database schema for game sessions, agents, moves, and decisions
+- [ ] **INF-03**: CORS configured to allow GitHub Pages frontend (chunkstand.github.io)
+- [ ] **INF-04**: Environment configuration management (development, staging, production)
+- [ ] **INF-05**: Health check endpoint returning 200 OK when services operational
+- [ ] **INF-06**: API contract documented (OpenAPI/JSON Schema for endpoints)
 
-### Game Logic
+### Real-time Communication (RTC)
 
-- [ ] **GL-01**: Turn cycles through registered agents sequentially
-- [ ] **GL-02**: 5 governance scenarios available for gameplay
-- [ ] **GL-03**: Scenario presented one at a time
-- [ ] **GL-04**: Decision recorded with agent, choice, and reasoning
-- [ ] **GL-05**: Game state persists in localStorage
+- [ ] **RTC-01**: Socket.io server with namespace/room support for game isolation
+- [ ] **RTC-02**: Spectator room implementation (`/spectator/:gameId`) for live viewing
+- [ ] **RTC-03**: WebSocket client integration in existing frontend HTML/JS
+- [ ] **RTC-04**: Server-authoritative game state broadcast to all connected spectators
+- [ ] **RTC-05**: 30-second heartbeat/ping-pong for connection health monitoring
+- [ ] **RTC-06**: Exponential backoff reconnection with jitter (max 10 retries)
+- [ ] **RTC-07**: Connection status indicators showing online/offline per spectator
 
-### Agent Integration
+### AI Integration (AI)
 
-- [ ] **AI-01**: Agent registration form (name, webhook URL)
-- [ ] **AI-02**: Turn notification sent to agent webhook
-- [ ] **AI-03**: Decision submission from webhook response
-- [ ] **AI-04**: Demo agents with predetermined responses included
+- [ ] **AI-01**: OpenAI API client integration with GPT-4o-mini for agent decisions
+- [ ] **AI-02**: Rate limiting using token bucket (max 60 RPM per API key)
+- [ ] **AI-03**: Response caching with 5-minute TTL for identical prompts
+- [ ] **AI-04**: Queue-based sequential processing for agent decisions (p-queue or BullMQ)
+- [ ] **AI-05**: Anthropic API client as fallback when OpenAI fails
+- [ ] **AI-06**: Circuit breaker pattern for API failures (open after 5 errors, retry after 60s)
+- [ ] **AI-07**: Daily cost monitoring with alerting threshold ($10/day)
+- [ ] **AI-08**: Prompt engineering for governance question answering with consistent JSON output
 
-### Deployment
+### Game Mechanics (GM)
 
-- [ ] **DEP-01**: GitHub Pages deployment configured
-- [ ] **DEP-02**: Custom domain (agentgameworks.com) connected
-- [ ] **DEP-03**: Landing page explaining the concept
+- [ ] **GM-01**: Linear map with minimum 10 checkpoints from start to finish
+- [ ] **GM-02**: Multiple-choice governance questions at each checkpoint
+- [ ] **GM-03**: Simultaneous turn system — all agents answer same question, then all move
+- [ ] **GM-04**: Move resolution based on answer correctness and speed
+- [ ] **GM-05**: Position tracking and collision detection (agents can occupy same space)
+- [ ] **GM-06**: AEL four-pillar scoring integration (affects movement bonuses)
+- [ ] **GM-07**: Move history/trail visualization showing agent path
+- [ ] **GM-08**: Demo agent tournament support (StrictBot, LenientBot, BalancedBot, GPT-4)
+- [ ] **GM-09**: Game state machine (INIT → AWAITING_ANSWERS → PROCESSING → RESOLVED → FINISHED)
+- [ ] **GM-10**: Answer time limit (30 seconds per question)
 
-## v2 Requirements
+### Spectator Experience (UX)
 
-Deferred to future release. Tracked but not in current roadmap.
+- [ ] **UX-01**: Visual map rendering with agent positions as tokens/icons
+- [ ] **UX-02**: Turn/move indicator showing current game phase
+- [ ] **UX-03**: Question display with 4 clear multiple-choice options
+- [ ] **UX-04**: Immediate answer feedback visual indicator (< 1 second after all agents answer)
+- [ ] **UX-05**: Leaderboard showing agent standings sorted by checkpoint progress
+- [ ] **UX-06**: Agent identification with distinct colors, icons, and names
+- [ ] **UX-07**: Game session state indicators (Waiting/Playing/Complete)
+- [ ] **UX-08**: Agent decision reasoning display (show WHY agent chose answer)
+- [ ] **UX-09**: Smooth animations for agent movement between checkpoints
+- [ ] **UX-10**: Responsive design for mobile spectators
 
-### Enhanced Gameplay
+## v2.0 Requirements (Deferred)
 
-- **EG-01**: Multiple governance principles to choose from
-- **EG-02**: Score tracking based on principle compliance
-- **EG-03**: Leaderboard of agent decisions
+Future enhancements tracked but not in v1.1 scope.
 
-### Real Agent Support
+### Advanced Gameplay
 
-- **RA-01**: OpenAI API integration for real AI agents
-- **RA-02**: Multiple AI providers (Anthropic, Google)
-- **RA-03**: Agent personality/configuration options
+- **ADV-01**: Branching paths with strategic route choices
+- **ADV-02**: Power-ups and special abilities for agents
+- **ADV-03**: Variable checkpoint distances and difficulty
+
+### Tournament System
+
+- **TOUR-01**: Multi-game tournament brackets
+- **TOUR-02**: Persistent leaderboard across sessions
+- **TOUR-03**: Replay system with step-through
+
+### Multi-Game Support
+
+- **MULTI-01**: Multiple simultaneous games on same server
+- **MULTI-02**: Spectator can choose which game to watch
+- **MULTI-03**: Game creation and joining system
 
 ## Out of Scope
 
-| Feature | Reason |
-|---------|--------|
-| Backend server | Webhook-based, client-side only for MVP |
-| User accounts | Public demo, no authentication needed |
-| Persistent database | localStorage sufficient for MVP |
-| Real AI agents | Dummy agents for testing, real agents in v2 |
-| Mobile app | Web-first, responsive design only |
+Explicitly excluded from v1.1. Documented to prevent scope creep.
+
+| Feature | Reason | Considered For |
+|---------|--------|----------------|
+| Human players as agents | v1.1 is spectator-only; humans watch AI compete | v1.2 |
+| Real-time voice/video | Complexity doesn't add governance value | Not planned |
+| Native mobile app | Web-first approach with responsive design sufficient | v2.0+ |
+| Blockchain/NFT integration | No educational value for governance learning | Not planned |
+| Custom domain (agentgameworks.com) | DNS setup is infrastructure, not feature | v1.1 infra task |
 
 ## Traceability
 
@@ -70,31 +103,53 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| GI-01 | Phase 1 | Pending |
-| GI-02 | Phase 1 | Pending |
-| GI-03 | Phase 1 | Pending |
-| GI-04 | Phase 1 | Pending |
-| GI-05 | Phase 1 | Pending |
-| GI-06 | Phase 1 | Pending |
-| GI-07 | Phase 1 | Pending |
-| GL-01 | Phase 1 | Pending |
-| GL-02 | Phase 1 | Pending |
-| GL-03 | Phase 1 | Pending |
-| GL-04 | Phase 1 | Pending |
-| GL-05 | Phase 1 | Pending |
-| AI-01 | Phase 1 | Pending |
-| AI-02 | Phase 1 | Pending |
-| AI-03 | Phase 1 | Pending |
-| AI-04 | Phase 1 | Pending |
-| DEP-01 | Phase 1 | Pending |
-| DEP-02 | Phase 1 | Pending |
-| DEP-03 | Phase 1 | Pending |
+| INF-01 | Phase 3 | Pending |
+| INF-02 | Phase 3 | Pending |
+| INF-03 | Phase 3 | Pending |
+| INF-04 | Phase 3 | Pending |
+| INF-05 | Phase 3 | Pending |
+| INF-06 | Phase 3 | Pending |
+| RTC-01 | Phase 4 | Pending |
+| RTC-02 | Phase 4 | Pending |
+| RTC-03 | Phase 4 | Pending |
+| RTC-04 | Phase 4 | Pending |
+| RTC-05 | Phase 4 | Pending |
+| RTC-06 | Phase 4 | Pending |
+| RTC-07 | Phase 4 | Pending |
+| AI-01 | Phase 5 | Pending |
+| AI-02 | Phase 5 | Pending |
+| AI-03 | Phase 5 | Pending |
+| AI-04 | Phase 5 | Pending |
+| AI-05 | Phase 5 | Pending |
+| AI-06 | Phase 5 | Pending |
+| AI-07 | Phase 5 | Pending |
+| AI-08 | Phase 5 | Pending |
+| GM-01 | Phase 6 | Pending |
+| GM-02 | Phase 6 | Pending |
+| GM-03 | Phase 6 | Pending |
+| GM-04 | Phase 6 | Pending |
+| GM-05 | Phase 6 | Pending |
+| GM-06 | Phase 6 | Pending |
+| GM-07 | Phase 6 | Pending |
+| GM-08 | Phase 6 | Pending |
+| GM-09 | Phase 6 | Pending |
+| GM-10 | Phase 6 | Pending |
+| UX-01 | Phase 7 | Pending |
+| UX-02 | Phase 7 | Pending |
+| UX-03 | Phase 7 | Pending |
+| UX-04 | Phase 7 | Pending |
+| UX-05 | Phase 7 | Pending |
+| UX-06 | Phase 7 | Pending |
+| UX-07 | Phase 7 | Pending |
+| UX-08 | Phase 7 | Pending |
+| UX-09 | Phase 7 | Pending |
+| UX-10 | Phase 7 | Pending |
 
 **Coverage:**
-- v1 requirements: 19 total
-- Mapped to phases: 19
+- v1.1 requirements: 38 total
+- Mapped to phases: 38
 - Unmapped: 0 ✓
 
 ---
-*Requirements defined: 2026-02-23*
-*Last updated: 2026-02-23 after initial definition*
+*Requirements defined: 2026-02-24*
+*Last updated: 2026-02-24 after v1.1 research synthesis*
