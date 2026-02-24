@@ -1,9 +1,10 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response } from 'express';
 import helmet from 'helmet';
 import compression from 'compression';
 import cors from 'cors';
 import { config, validateConfig } from './config/index';
 import { errorHandler } from './middleware/errorHandler';
+import { healthRouter } from './routes/health';
 
 // Validate configuration before starting server
 // This implements fail-fast behavior - server refuses to start with invalid config
@@ -44,8 +45,8 @@ app.get('/', (req: Request, res: Response) => {
   });
 });
 
-// Routes will be mounted here
-// app.use('/health', healthRouter); // To be added in Task 4
+// Routes
+app.use('/health', healthRouter);
 // app.use('/api/sessions', sessionRouter); // To be added in future tasks
 // app.use('/api/agents', agentRouter); // To be added in future tasks
 
