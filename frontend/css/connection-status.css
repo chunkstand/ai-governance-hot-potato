@@ -1,0 +1,470 @@
+/**
+ * Connection Status and Spectator Panel Styles
+ * AI Arena Frontend - Real-time spectator UI
+ */
+
+/* ============================================
+   CONNECTION STATUS INDICATOR
+   ============================================ */
+
+.connection-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.connection-status:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Status Dot */
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+/* Connected - Green with pulse */
+.status-connected {
+    background-color: #28a745;
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(40, 167, 69, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+    }
+}
+
+/* Connecting - Yellow with faster pulse */
+.status-connecting {
+    background-color: #ffc107;
+    animation: pulse-yellow 1s infinite;
+}
+
+@keyframes pulse-yellow {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.2);
+    }
+}
+
+/* Reconnecting - Orange with blink */
+.status-reconnecting {
+    background-color: #fd7e14;
+    animation: blink-orange 0.8s infinite;
+}
+
+@keyframes blink-orange {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* Disconnected - Red */
+.status-disconnected {
+    background-color: #dc3545;
+}
+
+/* Error - Red with rapid blink */
+.status-error {
+    background-color: #dc3545;
+    animation: blink-red 0.4s infinite;
+}
+
+@keyframes blink-red {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Status Text */
+.status-text {
+    font-weight: 600;
+    font-size: 13px;
+    transition: color 0.3s ease;
+}
+
+.status-text.status-connected { color: #28a745; }
+.status-text.status-connecting { color: #856404; }
+.status-text.status-reconnecting { color: #d46a1a; }
+.status-text.status-disconnected { color: #dc3545; }
+.status-text.status-error { color: #dc3545; }
+
+/* Connection Details (tooltip-like) */
+.connection-details {
+    font-size: 11px;
+    color: #6c757d;
+    margin-left: 4px;
+}
+
+/* ============================================
+   SPECTATOR PANEL
+   ============================================ */
+
+.spectator-panel {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.spectator-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.spectator-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.spectator-count {
+    font-size: 12px;
+    color: #6c757d;
+    background: #e9ecef;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+/* Spectator List */
+.spectator-list-container {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.spectator-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.spectator-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: white;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    border-left: 3px solid #007bff;
+    transition: all 0.2s ease;
+}
+
+.spectator-item:hover {
+    transform: translateX(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.spectator-item.spectator-current {
+    border-left-color: #28a745;
+    background: #e8f5e9;
+}
+
+.spectator-number {
+    width: 24px;
+    height: 24px;
+    background: #e9ecef;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.spectator-current .spectator-number {
+    background: #28a745;
+    color: white;
+}
+
+.spectator-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.spectator-status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.spectator-status-indicator.online {
+    background: #28a745;
+}
+
+.spectator-status-indicator.offline {
+    background: #6c757d;
+}
+
+.spectator-empty {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 20px;
+    font-size: 13px;
+}
+
+/* Spectator Controls */
+.spectator-controls {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #dee2e6;
+    text-align: center;
+}
+
+.btn-spectator {
+    background: #6c757d;
+    color: white;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn-spectator:hover {
+    background: #5a6268;
+}
+
+.btn-spectator.active {
+    background: #28a745;
+    box-shadow: 0 0 8px rgba(40, 167, 69, 0.4);
+}
+
+.btn-spectator.active:hover {
+    background: #218838;
+}
+
+/* ============================================
+   GAME MODE TOGGLE (Play vs Spectate)
+   ============================================ */
+
+.game-mode-selector {
+    display: flex;
+    gap: 8px;
+    background: #e9ecef;
+    padding: 4px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.mode-btn {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: transparent;
+    color: #6c757d;
+}
+
+.mode-btn:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.mode-btn.active {
+    background: white;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mode-btn.play-mode.active {
+    color: #007bff;
+}
+
+.mode-btn.spectate-mode.active {
+    color: #28a745;
+}
+
+/* ============================================
+   REAL-TIME INDICATORS
+   ============================================ */
+
+.live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #dc3545;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    background: #dc3545;
+    border-radius: 50%;
+    animation: live-pulse 1.5s infinite;
+}
+
+@keyframes live-pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .connection-status {
+        top: 5px;
+        right: 5px;
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    .status-text {
+        font-size: 12px;
+    }
+    
+    .connection-details {
+        display: none;
+    }
+    
+    .spectator-panel {
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .spectator-header h3 {
+        font-size: 14px;
+    }
+    
+    .spectator-list-container {
+        max-height: 150px;
+    }
+    
+    .spectator-item {
+        padding: 8px 10px;
+    }
+    
+    .spectator-name {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .connection-status {
+        position: fixed;
+        top: auto;
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+        justify-content: center;
+    }
+    
+    .game-mode-selector {
+        flex-direction: column;
+    }
+    
+    .mode-btn {
+        padding: 12px;
+    }
+}
+
+/* ============================================
+   ANIMATIONS & UTILITIES
+   ============================================ */
+
+.fade-in {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Connection state transitions */
+.connection-status {
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Spectator join animation */
+.spectator-item {
+    animation: spectator-join 0.3s ease;
+}
+
+@keyframes spectator-join {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
