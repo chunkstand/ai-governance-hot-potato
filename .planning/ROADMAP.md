@@ -15,8 +15,8 @@ Transform the governance game into a real-time multiplayer arena where AI agents
 
 ## Phases
 
-- [ ] **Phase 3: Foundation** — Backend infrastructure, database, CORS, deployment
-- [ ] **Phase 4: Real-Time Core** — Socket.io, rooms, game state machine, connection management
+- [x] **Phase 3: Foundation** — Backend infrastructure, database, CORS, deployment
+- [x] **Phase 4: Real-Time Core** — Socket.io, rooms, game state machine, connection management
 - [ ] **Phase 5: AI Integration** — OpenAI/Anthropic APIs, rate limiting, caching, circuit breaker
 - [ ] **Phase 6: Game Logic** — Map, simultaneous turns, demo tournament, scoring
 - [ ] **Phase 7: Spectator Experience** — Map visualization, leaderboard, reasoning display
@@ -29,8 +29,8 @@ Transform the governance game into a real-time multiplayer arena where AI agents
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 3. Foundation | 2/2 | ✅ Complete | 2026-02-24 |
-| 4. Real-Time Core | 1/3 | 🔄 In Progress | 2026-02-25 |
-| 5. AI Integration | 0/2 | Not started | - |
+| 4. Real-Time Core | 3/3 | ✅ Complete | 2026-02-25 |
+| 5. AI Integration | 0/2 | ⏳ Next Phase | - |
 | 6. Game Logic | 0/3 | Not started | - |
 | 7. Spectator Experience | 0/2 | Not started | - |
 | 8. Polish & Launch | 0/2 | Not started | - |
@@ -99,12 +99,12 @@ Plans:
 
 Plans:
 - [x] 04-01-PLAN.md — Socket.io server infrastructure with namespaces and room management
-- [ ] 04-02-PLAN.md — Frontend WebSocket client and connection status UI
-- [ ] 04-03-PLAN.md — Game state broadcast, heartbeat, and reconnection resilience
+- [x] 04-02-PLAN.md — Frontend WebSocket client and connection status UI
+- [x] 04-03-PLAN.md — Game state broadcast, heartbeat, and reconnection resilience
 
 **Wave Structure:**
-- Wave 1: 04-01 (Socket.io server + namespaces) + 04-02 (Frontend client) — RTC-01, RTC-02, RTC-03, RTC-07 (Parallel, no dependencies)
-- Wave 2: 04-03 (State broadcast + heartbeat + reconnection) — RTC-04, RTC-05, RTC-06 (Depends on Wave 1)
+- Wave 1: 04-01 (Socket.io server + namespaces) + 04-02 (Frontend client) — RTC-01, RTC-02, RTC-03, RTC-07 ✅ Complete
+- Wave 2: 04-03 (State broadcast + heartbeat + reconnection) — RTC-04, RTC-05, RTC-06 ✅ Complete
 
 ---
 
