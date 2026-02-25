@@ -48,6 +48,19 @@ function normalizeQuestionOptions(question: Question): DecisionInput['options'] 
   }));
 }
 
+function toGameStateAgents(agents: Agent[]): GameState['agents'] {
+  return agents.map(agent => ({
+    id: agent.id,
+    name: agent.name,
+    type: agent.type,
+    color: agent.color ?? '#95A5A6',
+    position: agent.position,
+    score: agent.score,
+    isConnected: true,
+    lastActivity: new Date()
+  }));
+}
+
 async function resolveAgentAnswer(
   agent: Agent,
   question: Question,
@@ -67,7 +80,7 @@ async function resolveAgentAnswer(
     const currentState = getCurrentState(gameId) as GameState | null;
     const input: DecisionInput = {
       promptVersion: PROMPT_VERSION,
-      visibleGameState: currentState ?? {},
+      visibleGameState: (currentState ?? {}) as Record<string, unknown>,
       question: question.text,
       options: normalizeQuestionOptions(question),
       agent: {
@@ -118,7 +131,7 @@ export async function runTournament(config: TournamentConfig): Promise<Tournamen
       createdAt: new Date(),
       updatedAt: new Date()
     },
-    agents,
+    agents: toGameStateAgents(agents),
     round: 1
   });
 
@@ -187,7 +200,7 @@ export async function runTournament(config: TournamentConfig): Promise<Tournamen
 
     const resolvedState = transition(processingState, { type: GamePhase.RESOLVED });
     updateGameState(gameId, {
-      agents,
+      agents: toGameStateAgents(agents),
       gameSession: {
         status: resolvedState.gameSession.status
       }
