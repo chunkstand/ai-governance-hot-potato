@@ -1,3 +1,9 @@
+import {
+  createDecisionCacheKey,
+  getCachedDecision,
+  setCachedDecision
+} from './cache/decisionCache';
+import { buildDecisionPrompt, PROMPT_VERSION } from './prompts/decisionPrompt';
 import { callAnthropicDecision } from './providers/anthropicClient';
 import { callOpenAIDecision } from './providers/openaiClient';
 import { enqueueDecision } from './queue/decisionQueue';
@@ -7,6 +13,7 @@ export interface DecisionRequest {
   gameId: string;
   apiKey: string;
   input: DecisionInput;
+  deterministic?: boolean;
 }
 
 export interface DecisionResult {
@@ -14,25 +21,53 @@ export interface DecisionResult {
   decision: DecisionOutput;
 }
 
+const CACHE_MODEL = 'gpt-4o-mini';
+
 function formatProviderError(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
 export async function generateDecision(request: DecisionRequest): Promise<DecisionResult> {
   const { gameId, apiKey, input } = request;
+  const deterministic = request.deterministic ?? true;
+
+  const cacheKey = deterministic
+    ? createDecisionCacheKey({
+        prompt: buildDecisionPrompt(input),
+        model: CACHE_MODEL,
+        promptVersion: input.promptVersion || PROMPT_VERSION,
+        agentId: input.agent.id,
+        gameId
+      })
+    : null;
+
+  if (cacheKey) {
+    const cachedDecision = getCachedDecision(cacheKey);
+    if (cachedDecision) {
+      return cachedDecision;
+    }
+  }
 
   return enqueueDecision(gameId, apiKey, async consumeToken => {
     await consumeToken();
 
     try {
       const decision = await callOpenAIDecision(input);
-      return { provider: 'openai', decision };
+      const result: DecisionResult = { provider: 'openai', decision };
+      if (cacheKey) {
+        setCachedDecision(cacheKey, result);
+      }
+      return result;
     } catch (openaiError) {
       await consumeToken();
 
       try {
         const decision = await callAnthropicDecision(input);
-        return { provider: 'anthropic', decision };
+        const result: DecisionResult = { provider: 'anthropic', decision };
+        if (cacheKey) {
+          setCachedDecision(cacheKey, result);
+        }
+        return result;
       } catch (anthropicError) {
         throw new Error(
           `Both AI providers failed. OpenAI error: ${formatProviderError(openaiError)}. ` +
