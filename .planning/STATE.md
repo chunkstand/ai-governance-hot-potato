@@ -22,7 +22,7 @@
 
 **Status:** Ready to execute
 
-**Current Plan:** 2
+**Current Plan:** 3
 **Total Plans in Phase:** 3
 
 **Completed:**
@@ -48,7 +48,7 @@
 
 **Progress:**
 
-[████████░░] 80%
+[█████████░] 90%
 ```
 v1.1 AI Arena Milestone
 [██████░░░░░░░░░░░░░░] 30%
@@ -89,6 +89,7 @@ Phase 8: Polish & Launch      [░░░░░░░░░░] 0% — Pending
 | Phase 04-real-time-core P02 | 2min | 3 tasks | 5 files |
 | Phase 04-real-time-core P03 | 6min | 4 tasks | 13 files |
 | Phase 05 P01 | 5 min | 2 tasks | 10 files |
+| Phase 05 P02 | 0 min | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -116,6 +117,8 @@ Phase 8: Polish & Launch      [░░░░░░░░░░] 0% — Pending
 | **Exponential backoff with jitter** | Prevents thundering herd on server restart | ✓ 04-03 Complete |
 | **Server-authoritative state** | Full broadcast ensures consistency | ✓ 04-03 Complete |
 - [Phase 05]: Pinned Anthropic provider to claude-3-5-sonnet-20241022 for stable Sonnet baseline
+- [Phase 05]: Decision cache key includes prompt + model + promptVersion + agentId + gameId to avoid cross-agent leakage
+- [Phase 05]: Circuit breaker opens after 5 consecutive errors with a 60s reset window
 
 ### Technical Stack (v1.1)
 
@@ -154,8 +157,8 @@ None. Phase 4 complete. Real-time infrastructure operational with server-authori
 
 ## Session Continuity
 
-**Last Session:** 2026-02-25T07:32:47.344Z
-**Stopped At:** Completed 05-01-PLAN.md
+**Last Session:** 2026-02-25T07:45:47.040Z
+**Stopped At:** Completed 05-02-PLAN.md
 **Resume File:** None
 
 ### Last Action

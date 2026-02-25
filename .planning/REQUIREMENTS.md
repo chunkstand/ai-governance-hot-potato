@@ -29,11 +29,11 @@ Requirements for AI Arena milestone. Each maps to roadmap phases.
 ### AI Integration (AI)
 
 - [x] **AI-01**: OpenAI API client integration with GPT-4o-mini for agent decisions
-- [ ] **AI-02**: Rate limiting using token bucket (max 60 RPM per API key)
-- [ ] **AI-03**: Response caching with 5-minute TTL for identical prompts
-- [ ] **AI-04**: Queue-based sequential processing for agent decisions (p-queue or BullMQ)
+- [x] **AI-02**: Rate limiting using token bucket (max 60 RPM per API key)
+- [x] **AI-03**: Response caching with 5-minute TTL for identical prompts
+- [x] **AI-04**: Queue-based sequential processing for agent decisions (p-queue or BullMQ)
 - [x] **AI-05**: Anthropic API client as fallback when OpenAI fails
-- [ ] **AI-06**: Circuit breaker pattern for API failures (open after 5 errors, retry after 60s)
+- [x] **AI-06**: Circuit breaker pattern for API failures (open after 5 errors, retry after 60s)
 - [ ] **AI-07**: Daily cost monitoring with alerting threshold ($10/day)
 - [x] **AI-08**: Prompt engineering for governance question answering with consistent JSON output
 
@@ -117,11 +117,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RTC-06 | Phase 4 | Complete |
 | RTC-07 | Phase 4 | Complete |
 | AI-01 | Phase 5 | Complete |
-| AI-02 | Phase 5 | Pending |
-| AI-03 | Phase 5 | Pending |
-| AI-04 | Phase 5 | Pending |
+| AI-02 | Phase 5 | Complete |
+| AI-03 | Phase 5 | Complete |
+| AI-04 | Phase 5 | Complete |
 | AI-05 | Phase 5 | Complete |
-| AI-06 | Phase 5 | Pending |
+| AI-06 | Phase 5 | Complete |
 | AI-07 | Phase 5 | Pending |
 | AI-08 | Phase 5 | Complete |
 | GM-01 | Phase 6 | Pending |
