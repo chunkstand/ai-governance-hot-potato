@@ -48,7 +48,7 @@
 
 **Progress:**
 
-[█████████░] 85%
+[██████████] 100%
 ```
 v1.1 AI Arena Milestone
 [██████░░░░░░░░░░░░░░] 30%
@@ -92,6 +92,7 @@ Phase 8: Polish & Launch      [░░░░░░░░░░] 0% — Pending
 | Phase 05 P02 | 0 min | 3 tasks | 7 files |
 | Phase 05 P03 | 14 min | 2 tasks | 12 files |
 | Phase 06 P01 | 8 min | 5 tasks | 10 files |
+| Phase 06-game-logic P03 | 19 min | 5 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -122,9 +123,102 @@ Phase 8: Polish & Launch      [░░░░░░░░░░] 0% — Pending
 - [Phase 05]: Decision cache key includes prompt + model + promptVersion + agentId + gameId to avoid cross-agent leakage
 - [Phase 05]: Circuit breaker opens after 5 consecutive errors with a 60s reset window
 - [Phase 05]: Failure escalation triggers auto-loss after 3 failures
+- [Phase 05]: Cost alert default set to ### Decisions Made
+
+0/day with | Decision | Rationale | Status |
+|----------|-----------|--------|
+| Backend required for v1.1 | Real-time gameplay + AI APIs need server | ✓ Decided |
+| Node.js + Express | Familiarity from v1.0, ecosystem fit | ✓ Decided |
+| Socket.io (not native WebSocket) | Auto reconnection, rooms, fallbacks | ✓ Decided |
+| PostgreSQL on Render | ACID guarantees, free tier available | ✓ Decided |
+| Simultaneous turns | Better spectator pacing vs sequential | ✓ Decided |
+| Spectator-only (no human players) | v1.1 scope boundary | ✓ Decided |
+| **Fail-fast config validation** | Prevent runtime errors from missing env vars | ✓ 03-01 Complete |
+| **UUID primary keys** | Distributed system compatibility | ✓ 03-01 Complete |
+| **Staging + Production split** | Safe deployment pipeline | ✓ 03-01 Complete |
+| **Health check monitors DB** | Enable auto-rollback on Render | ✓ 03-01 Complete |
+| **Custom CORS middleware** | Fine-grained origin control, multiple origins support | ✓ 03-02 Complete |
+| **OpenAPI-first API design** | Clear contract for Phase 7 frontend development | ✓ 03-02 Complete |
+| **Socket.io over native WebSocket** | Auto reconnection, rooms, fallbacks | ✓ 04-01 Complete |
+| **Separate namespaces (/game, /spectator)** | Keeps concerns isolated | ✓ 04-01 Complete |
+| **Sequential room naming** | game:XXX format for human readability | ✓ 04-01 Complete |
+| **Socket.io attached to HTTP server** | Same port simplifies deployment | ✓ 04-01 Complete |
+| **CDN for Socket.io client** | Avoids build complexity | ✓ 04-02 Complete |
+| **Exponential backoff with jitter** | Prevents thundering herd on server restart | ✓ 04-03 Complete |
+| **Server-authoritative state** | Full broadcast ensures consistency | ✓ 04-03 Complete |
+- [Phase 05]: Pinned Anthropic provider to claude-3-5-sonnet-20241022 for stable Sonnet baseline
+- [Phase 05]: Decision cache key includes prompt + model + promptVersion + agentId + gameId to avoid cross-agent leakage
+- [Phase 05]: Circuit breaker opens after 5 consecutive errors with a 60s reset window
+- [Phase 05]: Failure escalation triggers auto-loss after 3 failures
+- [Phase 05]: Cost alert default set to ### Decisions Made
+
+0/day with | Decision | Rationale | Status |
+|----------|-----------|--------|
+| Backend required for v1.1 | Real-time gameplay + AI APIs need server | ✓ Decided |
+| Node.js + Express | Familiarity from v1.0, ecosystem fit | ✓ Decided |
+| Socket.io (not native WebSocket) | Auto reconnection, rooms, fallbacks | ✓ Decided |
+| PostgreSQL on Render | ACID guarantees, free tier available | ✓ Decided |
+| Simultaneous turns | Better spectator pacing vs sequential | ✓ Decided |
+| Spectator-only (no human players) | v1.1 scope boundary | ✓ Decided |
+| **Fail-fast config validation** | Prevent runtime errors from missing env vars | ✓ 03-01 Complete |
+| **UUID primary keys** | Distributed system compatibility | ✓ 03-01 Complete |
+| **Staging + Production split** | Safe deployment pipeline | ✓ 03-01 Complete |
+| **Health check monitors DB** | Enable auto-rollback on Render | ✓ 03-01 Complete |
+| **Custom CORS middleware** | Fine-grained origin control, multiple origins support | ✓ 03-02 Complete |
+| **OpenAPI-first API design** | Clear contract for Phase 7 frontend development | ✓ 03-02 Complete |
+| **Socket.io over native WebSocket** | Auto reconnection, rooms, fallbacks | ✓ 04-01 Complete |
+| **Separate namespaces (/game, /spectator)** | Keeps concerns isolated | ✓ 04-01 Complete |
+| **Sequential room naming** | game:XXX format for human readability | ✓ 04-01 Complete |
+| **Socket.io attached to HTTP server** | Same port simplifies deployment | ✓ 04-01 Complete |
+| **CDN for Socket.io client** | Avoids build complexity | ✓ 04-02 Complete |
+| **Exponential backoff with jitter** | Prevents thundering herd on server restart | ✓ 04-03 Complete |
+| **Server-authoritative state** | Full broadcast ensures consistency | ✓ 04-03 Complete |
+- [Phase 05]: Pinned Anthropic provider to claude-3-5-sonnet-20241022 for stable Sonnet baseline
+- [Phase 05]: Decision cache key includes prompt + model + promptVersion + agentId + gameId to avoid cross-agent leakage
+- [Phase 05]: Circuit breaker opens after 5 consecutive errors with a 60s reset window
+- [Phase 05]: Failure escalation triggers auto-loss after 3 failures
+- [Phase 05]: Cost alert default set to ### Decisions Made
+
+0/day with | Decision | Rationale | Status |
+|----------|-----------|--------|
+| Backend required for v1.1 | Real-time gameplay + AI APIs need server | ✓ Decided |
+| Node.js + Express | Familiarity from v1.0, ecosystem fit | ✓ Decided |
+| Socket.io (not native WebSocket) | Auto reconnection, rooms, fallbacks | ✓ Decided |
+| PostgreSQL on Render | ACID guarantees, free tier available | ✓ Decided |
+| Simultaneous turns | Better spectator pacing vs sequential | ✓ Decided |
+| Spectator-only (no human players) | v1.1 scope boundary | ✓ Decided |
+| **Fail-fast config validation** | Prevent runtime errors from missing env vars | ✓ 03-01 Complete |
+| **UUID primary keys** | Distributed system compatibility | ✓ 03-01 Complete |
+| **Staging + Production split** | Safe deployment pipeline | ✓ 03-01 Complete |
+| **Health check monitors DB** | Enable auto-rollback on Render | ✓ 03-01 Complete |
+| **Custom CORS middleware** | Fine-grained origin control, multiple origins support | ✓ 03-02 Complete |
+| **OpenAPI-first API design** | Clear contract for Phase 7 frontend development | ✓ 03-02 Complete |
+| **Socket.io over native WebSocket** | Auto reconnection, rooms, fallbacks | ✓ 04-01 Complete |
+| **Separate namespaces (/game, /spectator)** | Keeps concerns isolated | ✓ 04-01 Complete |
+| **Sequential room naming** | game:XXX format for human readability | ✓ 04-01 Complete |
+| **Socket.io attached to HTTP server** | Same port simplifies deployment | ✓ 04-01 Complete |
+| **CDN for Socket.io client** | Avoids build complexity | ✓ 04-02 Complete |
+| **Exponential backoff with jitter** | Prevents thundering herd on server restart | ✓ 04-03 Complete |
+| **Server-authoritative state** | Full broadcast ensures consistency | ✓ 04-03 Complete |
+- [Phase 05]: Pinned Anthropic provider to claude-3-5-sonnet-20241022 for stable Sonnet baseline
+- [Phase 05]: Decision cache key includes prompt + model + promptVersion + agentId + gameId to avoid cross-agent leakage
+- [Phase 05]: Circuit breaker opens after 5 consecutive errors with a 60s reset window
+- [Phase 05]: Failure escalation triggers auto-loss after 3 failures
 - [Phase 05]: Cost alert default set to $10/day with $2 per-game cap
 - [Phase 05]: Minimal prompt mode activates once per-game cap is reached
 - [Phase 06]: Use in-memory answer storage with per-game timers before persistence
+ per-game cap
+- [Phase 05]: Minimal prompt mode activates once per-game cap is reached
+- [Phase 06]: Use in-memory answer storage with per-game timers before persistence
+- [Phase 06-game-logic]: Use pillar alignment mapping to compute movement bonuses from AEL scores
+ per-game cap
+- [Phase 05]: Minimal prompt mode activates once per-game cap is reached
+- [Phase 06]: Use in-memory answer storage with per-game timers before persistence
+ per-game cap
+- [Phase 05]: Minimal prompt mode activates once per-game cap is reached
+- [Phase 06]: Use in-memory answer storage with per-game timers before persistence
+- [Phase 06-game-logic]: Use pillar alignment mapping to compute movement bonuses from AEL scores
+- [Phase 06-game-logic]: Broadcast only recent move history (last 20 moves) in state payloads
 
 ### Technical Stack (v1.1)
 
@@ -163,8 +257,8 @@ None. Phase 4 complete. Real-time infrastructure operational with server-authori
 
 ## Session Continuity
 
-**Last Session:** 2026-02-25T15:58:15.147Z
-**Stopped At:** Completed 06-01-PLAN.md
+**Last Session:** 2026-02-25T16:22:02.230Z
+**Stopped At:** Completed 06-03-PLAN.md
 **Resume File:** None
 
 ### Last Action

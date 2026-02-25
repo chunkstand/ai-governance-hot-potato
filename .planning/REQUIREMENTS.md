@@ -44,8 +44,8 @@ Requirements for AI Arena milestone. Each maps to roadmap phases.
 - [ ] **GM-03**: Simultaneous turn system — all agents answer same question, then all move
 - [ ] **GM-04**: Move resolution based on answer correctness and speed
 - [ ] **GM-05**: Position tracking and collision detection (agents can occupy same space)
-- [ ] **GM-06**: AEL four-pillar scoring integration (affects movement bonuses)
-- [ ] **GM-07**: Move history/trail visualization showing agent path
+- [x] **GM-06**: AEL four-pillar scoring integration (affects movement bonuses)
+- [x] **GM-07**: Move history/trail visualization showing agent path
 - [ ] **GM-08**: Demo agent tournament support (StrictBot, LenientBot, BalancedBot, GPT-4)
 - [x] **GM-09**: Game state machine (INIT → AWAITING_ANSWERS → PROCESSING → RESOLVED → FINISHED)
 - [x] **GM-10**: Answer time limit (30 seconds per question)
@@ -129,8 +129,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | GM-03 | Phase 6 | Pending |
 | GM-04 | Phase 6 | Pending |
 | GM-05 | Phase 6 | Pending |
-| GM-06 | Phase 6 | Pending |
-| GM-07 | Phase 6 | Pending |
+| GM-06 | Phase 6 | Complete |
+| GM-07 | Phase 6 | Complete |
 | GM-08 | Phase 6 | Pending |
 | GM-09 | Phase 6 | Complete |
 | GM-10 | Phase 6 | Complete |
