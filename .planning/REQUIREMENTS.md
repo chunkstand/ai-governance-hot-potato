@@ -34,7 +34,7 @@ Requirements for AI Arena milestone. Each maps to roadmap phases.
 - [x] **AI-04**: Queue-based sequential processing for agent decisions (p-queue or BullMQ)
 - [x] **AI-05**: Anthropic API client as fallback when OpenAI fails
 - [x] **AI-06**: Circuit breaker pattern for API failures (open after 5 errors, retry after 60s)
-- [ ] **AI-07**: Daily cost monitoring with alerting threshold ($10/day)
+- [x] **AI-07**: Daily cost monitoring with alerting threshold ($10/day)
 - [x] **AI-08**: Prompt engineering for governance question answering with consistent JSON output
 
 ### Game Mechanics (GM)
@@ -122,7 +122,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AI-04 | Phase 5 | Complete |
 | AI-05 | Phase 5 | Complete |
 | AI-06 | Phase 5 | Complete |
-| AI-07 | Phase 5 | Pending |
+| AI-07 | Phase 5 | Complete |
 | AI-08 | Phase 5 | Complete |
 | GM-01 | Phase 6 | Pending |
 | GM-02 | Phase 6 | Pending |
