@@ -4,7 +4,8 @@ import {
   setCachedDecision
 } from './cache/decisionCache';
 import { callOpenAIDecisionWithCircuit } from './circuit/openaiCircuit';
-import { buildDecisionPrompt, PROMPT_VERSION } from './prompts/decisionPrompt';
+import { recordUsage, shouldUseMinimalPrompt } from './cost/costTracker';
+import { buildDecisionPrompt, DecisionPromptMode, PROMPT_VERSION } from './prompts/decisionPrompt';
 import { callAnthropicDecision } from './providers/anthropicClient';
 import { enqueueDecision } from './queue/decisionQueue';
 import { DecisionInput, DecisionOutput } from './types/decision';
@@ -30,10 +31,11 @@ function formatProviderError(error: unknown): string {
 export async function generateDecision(request: DecisionRequest): Promise<DecisionResult> {
   const { gameId, apiKey, input } = request;
   const deterministic = request.deterministic ?? true;
+  const promptMode: DecisionPromptMode = shouldUseMinimalPrompt(gameId) ? 'minimal' : 'full';
 
   const cacheKey = deterministic
     ? createDecisionCacheKey({
-        prompt: buildDecisionPrompt(input),
+        prompt: buildDecisionPrompt(input, { mode: promptMode }),
         model: CACHE_MODEL,
         promptVersion: input.promptVersion || PROMPT_VERSION,
         agentId: input.agent.id,
@@ -52,8 +54,9 @@ export async function generateDecision(request: DecisionRequest): Promise<Decisi
     await consumeToken();
 
     try {
-      const decision = await callOpenAIDecisionWithCircuit(input);
-      const result: DecisionResult = { provider: 'openai', decision };
+      const response = await callOpenAIDecisionWithCircuit(input, { promptMode });
+      recordUsage(gameId, 'openai', response.usage);
+      const result: DecisionResult = { provider: 'openai', decision: response.decision };
       if (cacheKey) {
         setCachedDecision(cacheKey, result);
       }
@@ -62,8 +65,9 @@ export async function generateDecision(request: DecisionRequest): Promise<Decisi
       await consumeToken();
 
       try {
-        const decision = await callAnthropicDecision(input);
-        const result: DecisionResult = { provider: 'anthropic', decision };
+        const response = await callAnthropicDecision(input, { promptMode });
+        recordUsage(gameId, 'anthropic', response.usage);
+        const result: DecisionResult = { provider: 'anthropic', decision: response.decision };
         if (cacheKey) {
           setCachedDecision(cacheKey, result);
         }

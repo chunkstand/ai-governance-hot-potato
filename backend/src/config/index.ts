@@ -14,8 +14,10 @@ export interface Config {
   databaseUrl: string; // REQUIRED - no default
   corsOrigin: string; // REQUIRED - no default
   socketCorsOrigin: string; // WebSocket CORS origin (defaults to corsOrigin)
-  openaiApiKey: string | undefined; // Optional for now, required in Phase 5
-  anthropicApiKey: string | undefined; // Optional for now, required in Phase 5
+  openaiApiKey: string | undefined; // Required in non-test environments for Phase 5
+  anthropicApiKey: string | undefined; // Required in non-test environments for Phase 5
+  aiDailyCostAlertUsd: number;
+  aiGameCostCapUsd: number;
 }
 
 /**
@@ -74,6 +76,17 @@ function validatePort(portStr: string | undefined): number {
   return port;
 }
 
+function validatePositiveNumber(name: string, value: string | undefined, fallback: number): number {
+  if (!value) {
+    return fallback;
+  }
+  const parsed = Number(value);
+  if (Number.isNaN(parsed) || parsed <= 0) {
+    throw new Error(`${name} must be a positive number. Current value: ${value}`);
+  }
+  return parsed;
+}
+
 /**
  * Validates all required environment variables
  * Implements fail-fast behavior - application refuses to start if configuration is invalid
@@ -89,6 +102,10 @@ export function validateConfig(): Config {
   const corsOrigin = process.env.CORS_ORIGIN;
   const nodeEnv = process.env.NODE_ENV || 'development';
   const portStr = process.env.PORT;
+  const openaiApiKey = process.env.OPENAI_API_KEY;
+  const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+  const dailyAlertUsd = process.env.AI_DAILY_COST_ALERT_USD;
+  const gameCapUsd = process.env.AI_GAME_COST_CAP_USD;
 
   // Validate required variables
   if (!databaseUrl) {
@@ -96,6 +113,15 @@ export function validateConfig(): Config {
   }
   if (!corsOrigin) {
     errors.push('CORS_ORIGIN: Required for frontend communication');
+  }
+
+  if (nodeEnv !== 'test') {
+    if (!openaiApiKey) {
+      errors.push('OPENAI_API_KEY: Required for AI decision providers');
+    }
+    if (!anthropicApiKey) {
+      errors.push('ANTHROPIC_API_KEY: Required for AI decision providers');
+    }
   }
 
   // If we have missing required vars, throw with helpful message
@@ -124,6 +150,18 @@ export function validateConfig(): Config {
     errors.push(`DATABASE_URL: ${e instanceof Error ? e.message : e}`);
   }
 
+  try {
+    validatePositiveNumber('AI_DAILY_COST_ALERT_USD', dailyAlertUsd, 10);
+  } catch (e) {
+    errors.push(`AI_DAILY_COST_ALERT_USD: ${e instanceof Error ? e.message : e}`);
+  }
+
+  try {
+    validatePositiveNumber('AI_GAME_COST_CAP_USD', gameCapUsd, 2);
+  } catch (e) {
+    errors.push(`AI_GAME_COST_CAP_USD: ${e instanceof Error ? e.message : e}`);
+  }
+
   // If any validation errors occurred, throw them
   if (errors.length > 0) {
     throw new Error(
@@ -140,8 +178,10 @@ export function validateConfig(): Config {
     databaseUrl: requireEnvVar('DATABASE_URL', databaseUrl),
     corsOrigin: validatedCorsOrigin,
     socketCorsOrigin: process.env.SOCKET_CORS_ORIGIN || validatedCorsOrigin,
-    openaiApiKey: process.env.OPENAI_API_KEY,
-    anthropicApiKey: process.env.ANTHROPIC_API_KEY
+    openaiApiKey,
+    anthropicApiKey,
+    aiDailyCostAlertUsd: validatePositiveNumber('AI_DAILY_COST_ALERT_USD', dailyAlertUsd, 10),
+    aiGameCostCapUsd: validatePositiveNumber('AI_GAME_COST_CAP_USD', gameCapUsd, 2)
   };
 }
 

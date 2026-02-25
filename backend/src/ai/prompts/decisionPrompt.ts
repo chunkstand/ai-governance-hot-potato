@@ -2,10 +2,37 @@ import { DecisionInput } from '../types/decision';
 
 export const PROMPT_VERSION = 'v1';
 
-export function buildDecisionPrompt(input: DecisionInput): string {
+export type DecisionPromptMode = 'full' | 'minimal';
+
+interface DecisionPromptOptions {
+  mode?: DecisionPromptMode;
+}
+
+export function buildDecisionPrompt(
+  input: DecisionInput,
+  options: DecisionPromptOptions = {}
+): string {
+  const mode = options.mode ?? 'full';
   const optionsList = input.options
     .map(option => `${option.id}: ${option.text}`)
     .join('\n');
+
+  if (mode === 'minimal') {
+    const compactState = JSON.stringify(input.visibleGameState);
+
+    return [
+      'Return ONLY valid JSON with fields:',
+      '{"answer":"A|B|C|D","reasoningSummary":"brief","confidence":0-1,"alternatives":[{"answer":"A|B|C|D","reason":"brief"}]}',
+      'No extra text.',
+      `PromptVersion: ${input.promptVersion || PROMPT_VERSION}`,
+      'PromptMode: minimal',
+      `AgentId: ${input.agent.id}`,
+      `Question: ${input.question}`,
+      'Options:',
+      optionsList,
+      `VisibleGameState: ${compactState}`
+    ].join('\n');
+  }
 
   const visibleState = JSON.stringify(input.visibleGameState, null, 2);
 

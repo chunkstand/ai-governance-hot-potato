@@ -1,6 +1,6 @@
 import CircuitBreaker from 'opossum';
-import { callOpenAIDecision } from '../providers/openaiClient';
-import { DecisionInput, DecisionOutput } from '../types/decision';
+import { callOpenAIDecision, OpenAIDecisionOptions, OpenAIDecisionResponse } from '../providers/openaiClient';
+import { DecisionInput } from '../types/decision';
 
 const OPENAI_TIMEOUT_MS = 5000;
 const OPENAI_RESET_TIMEOUT_MS = 60_000;
@@ -15,7 +15,8 @@ const openaiCircuit = new CircuitBreaker(callOpenAIDecision, {
 });
 
 export async function callOpenAIDecisionWithCircuit(
-  input: DecisionInput
-): Promise<DecisionOutput> {
-  return openaiCircuit.fire(input);
+  input: DecisionInput,
+  options?: OpenAIDecisionOptions
+): Promise<OpenAIDecisionResponse> {
+  return openaiCircuit.fire(input, options);
 }

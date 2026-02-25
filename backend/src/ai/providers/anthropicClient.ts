@@ -1,14 +1,25 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { config } from '../../config';
-import { buildDecisionPrompt } from '../prompts/decisionPrompt';
+import { buildDecisionPrompt, DecisionPromptMode } from '../prompts/decisionPrompt';
 import { DecisionInput, DecisionOutput } from '../types/decision';
 import { validateDecisionOutput } from '../validation/decisionValidator';
+import { ProviderUsage } from '../cost/costTypes';
 
 const ANTHROPIC_MODEL = 'claude-3-5-sonnet-20241022';
 const ANTHROPIC_MAX_TOKENS = 512;
 const ANTHROPIC_TIMEOUT_MS = 5000;
 
-function getAnthropicClient(): Anthropic {
+export interface AnthropicDecisionOptions {
+  promptMode?: DecisionPromptMode;
+  timeoutMs?: number;
+}
+
+export interface AnthropicDecisionResponse {
+  decision: DecisionOutput;
+  usage: ProviderUsage;
+}
+
+function getAnthropicClient(timeoutMs?: number): Anthropic {
   const apiKey = config.anthropicApiKey;
   if (!apiKey) {
     throw new Error('Missing ANTHROPIC_API_KEY for Anthropic client');
@@ -16,13 +27,16 @@ function getAnthropicClient(): Anthropic {
 
   return new Anthropic({
     apiKey,
-    timeout: ANTHROPIC_TIMEOUT_MS
+    timeout: timeoutMs ?? ANTHROPIC_TIMEOUT_MS
   });
 }
 
-export async function callAnthropicDecision(input: DecisionInput): Promise<DecisionOutput> {
-  const client = getAnthropicClient();
-  const prompt = buildDecisionPrompt(input);
+export async function callAnthropicDecision(
+  input: DecisionInput,
+  options: AnthropicDecisionOptions = {}
+): Promise<AnthropicDecisionResponse> {
+  const client = getAnthropicClient(options.timeoutMs);
+  const prompt = buildDecisionPrompt(input, { mode: options.promptMode });
 
   const response = await client.messages.create({
     model: ANTHROPIC_MODEL,
@@ -43,5 +57,14 @@ export async function callAnthropicDecision(input: DecisionInput): Promise<Decis
     throw new Error(`Anthropic response failed validation: ${JSON.stringify(validation.errors)}`);
   }
 
-  return validation.value;
+  const usage: ProviderUsage = {
+    inputTokens: response.usage?.input_tokens ?? 0,
+    outputTokens: response.usage?.output_tokens ?? 0,
+    totalTokens:
+      response.usage?.input_tokens && response.usage?.output_tokens
+        ? response.usage.input_tokens + response.usage.output_tokens
+        : (response.usage?.input_tokens ?? 0) + (response.usage?.output_tokens ?? 0)
+  };
+
+  return { decision: validation.value, usage };
 }

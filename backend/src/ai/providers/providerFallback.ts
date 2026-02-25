@@ -15,12 +15,12 @@ export async function callDecisionWithFallback(
   input: DecisionInput
 ): Promise<FallbackDecisionResult> {
   try {
-    const decision = await callOpenAIDecision(input);
-    return { provider: 'openai', decision };
+    const response = await callOpenAIDecision(input);
+    return { provider: 'openai', decision: response.decision };
   } catch (openaiError) {
     try {
-      const decision = await callAnthropicDecision(input);
-      return { provider: 'anthropic', decision };
+      const response = await callAnthropicDecision(input);
+      return { provider: 'anthropic', decision: response.decision };
     } catch (anthropicError) {
       throw new Error(
         `Both AI providers failed. OpenAI error: ${formatError(openaiError)}. ` +
