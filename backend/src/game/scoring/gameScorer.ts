@@ -24,8 +24,8 @@ function calculatePillarBonus(pillarScores: PillarScores): number {
     return 0;
   }
 
-  const average = values.reduce((sum, value) => sum + value, 0) / values.length;
-  return Math.min(5, Math.round((average / 100) * 5));
+  const highest = Math.max(...values);
+  return Math.min(5, Math.round((highest / 100) * 5));
 }
 
 function ensureScore(gameId: string, agentId: string): GameScore {

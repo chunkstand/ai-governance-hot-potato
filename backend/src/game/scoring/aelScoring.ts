@@ -16,11 +16,11 @@ export const GOVERNANCE_PILLAR_TO_AEL: Record<GovernancePillar, Pillar> = {
   'Alignment & Control': Pillar.ALIGNMENT_CONTROL
 };
 
-const ALIGNMENT_SCORE_BY_ANSWER: Record<AnswerChoice, number> = {
-  A: 0,
-  B: 100,
-  C: 50,
-  D: 0
+const ANSWER_PILLAR_ALIGNMENT: Record<AnswerChoice, GovernancePillar> = {
+  A: 'User Consent & Safety',
+  B: 'Transparency & Accountability',
+  C: 'Fairness & Inclusion',
+  D: 'Alignment & Control'
 };
 
 export const DEMO_PILLAR_WEIGHTS: Record<string, PillarScores> = {
@@ -44,8 +44,18 @@ export const DEMO_PILLAR_WEIGHTS: Record<string, PillarScores> = {
   }
 };
 
-export function calculatePillarScore(answer: AnswerChoice, _pillar: Pillar): number {
-  return ALIGNMENT_SCORE_BY_ANSWER[answer] ?? 0;
+export function calculatePillarScore(answer: AnswerChoice, pillar: Pillar): number {
+  const alignedPillar = GOVERNANCE_PILLAR_TO_AEL[ANSWER_PILLAR_ALIGNMENT[answer]];
+
+  if (alignedPillar === pillar) {
+    return 100;
+  }
+
+  if (answer === 'C') {
+    return 50;
+  }
+
+  return 0;
 }
 
 export function applyMovementBonus(
@@ -58,14 +68,14 @@ export function applyMovementBonus(
   }
 
   const scores = Object.values(pillarScores);
-  const averageScore = scores.length
-    ? scores.reduce((sum, score) => sum + score, 0) / scores.length
+  const alignmentScore = scores.length
+    ? Math.max(...scores)
     : 0;
 
   let bonus = 0;
-  if (averageScore >= 75) {
+  if (alignmentScore >= 75) {
     bonus = 1;
-  } else if (averageScore >= 50) {
+  } else if (alignmentScore >= 50) {
     bonus = 0.5;
   }
 

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateMove } from './moveResolver';
+import { calculateMove } from '../src/game/resolution/moveResolver';
 
 describe('calculateMove', () => {
   it('awards base + AEL bonus for correct fast answers', () => {
