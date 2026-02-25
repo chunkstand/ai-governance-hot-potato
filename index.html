@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Governance Hot Potato</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="frontend/css/connection-status.css">
+    <!-- Socket.io Client -->
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -37,6 +40,14 @@
                 <h1>🤖 AI Governance Hot Potato</h1>
                 <p class="golden-rule">AEL Framework: <strong>User Consent, Transparency, Fairness, Alignment</strong></p>
                 <button id="learnAelBtn" class="btn btn-small btn-outline">📚 Learn About AEL</button>
+                
+                <!-- Connection Status Indicator -->
+                <div class="connection-status" id="connection-status-container">
+                    <div class="status-indicator">
+                        <span class="status-dot status-disconnected" id="connection-status-dot"></span>
+                        <span class="status-text status-disconnected" id="connection-status-text">Offline</span>
+                    </div>
+                </div>
             </header>
 
             <main>
@@ -44,6 +55,16 @@
                 <div class="turn-indicator">
                     <span class="agent-badge" id="currentAgent">Waiting for agents...</span>
                     <span class="turn-number">Turn <span id="turnNumber">0</span></span>
+                </div>
+
+                <!-- Game Mode Selector -->
+                <div class="game-mode-selector" id="game-mode-selector">
+                    <button class="mode-btn play-mode active" data-mode="play">
+                        🎮 Play
+                    </button>
+                    <button class="mode-btn spectate-mode" data-mode="spectate">
+                        👁️ Spectate
+                    </button>
                 </div>
 
                 <!-- Scenario Card -->
@@ -241,6 +262,24 @@
                     <ul id="historyList"></ul>
                     <p id="noHistory" class="empty-message">No decisions yet</p>
                 </div>
+
+                <!-- Spectator Panel -->
+                <div class="spectator-panel" id="spectator-panel">
+                    <div class="spectator-header">
+                        <h3>👥 Spectators</h3>
+                        <span class="spectator-count" id="spectator-count">0 watching</span>
+                    </div>
+                    <div class="spectator-list-container">
+                        <ul class="spectator-list" id="spectator-list">
+                            <li class="spectator-empty">Not connected to server</li>
+                        </ul>
+                    </div>
+                    <div class="spectator-controls">
+                        <button id="spectator-toggle-btn" class="btn btn-small btn-spectator">
+                            👁️ Spectate
+                        </button>
+                    </div>
+                </div>
             </aside>
         </section>
     </div>
@@ -280,6 +319,92 @@
     <!-- Tooltip Container -->
     <div id="tooltip" class="tooltip hidden"></div>
 
+    <script src="frontend/js/socket-client.js"></script>
+    <script src="frontend/js/connection-status.js"></script>
     <script src="app.js"></script>
+    
+    <!-- Spectator Mode Integration -->
+    <script>
+        // Initialize spectator mode when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize connection status manager
+            window.connectionStatusManager = new ConnectionStatusManager({
+                socketClient: window.socketClient,
+                container: '#connection-status-container',
+                spectatorPanel: '#spectator-panel'
+            });
+            
+            // Game mode selector handler
+            const modeButtons = document.querySelectorAll('.mode-btn');
+            let currentMode = 'play';
+            
+            modeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const mode = btn.dataset.mode;
+                    
+                    // Update UI
+                    modeButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentMode = mode;
+                    
+                    // Handle mode switch
+                    if (mode === 'spectate') {
+                        // Connect to WebSocket for spectator mode
+                        window.socketClient.connect().catch(err => {
+                            console.log('[Spectator] Connection failed:', err.message);
+                            // Show error to user
+                            alert('Failed to connect to spectator server. Make sure the backend is running.');
+                            // Revert to play mode
+                            modeButtons.forEach(b => b.classList.remove('active'));
+                            document.querySelector('[data-mode="play"]').classList.add('active');
+                        });
+                    } else {
+                        // Disconnect from spectator mode
+                        window.socketClient.disconnect();
+                    }
+                    
+                    console.log('[Spectator] Mode switched to:', mode);
+                });
+            });
+            
+            // Spectator toggle button handler
+            const toggleBtn = document.getElementById('spectator-toggle-btn');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    if (window.socketClient.isConnected) {
+                        window.socketClient.disconnect();
+                        // Update mode button UI
+                        modeButtons.forEach(b => b.classList.remove('active'));
+                        document.querySelector('[data-mode="play"]').classList.add('active');
+                    } else {
+                        window.socketClient.connect().catch(err => {
+                            console.error('[Spectator] Failed to connect:', err);
+                            alert('Failed to connect to spectator server.');
+                        });
+                    }
+                });
+            }
+            
+            // Show/hide spectator UI based on game section visibility
+            const gameBoard = document.getElementById('gameBoard');
+            const landing = document.getElementById('landing');
+            const observer = new MutationObserver(() => {
+                if (gameBoard && !gameBoard.classList.contains('hidden')) {
+                    window.connectionStatusManager?.show();
+                } else {
+                    window.connectionStatusManager?.hide();
+                }
+            });
+            
+            if (gameBoard) {
+                observer.observe(gameBoard, { attributes: true, attributeFilter: ['class'] });
+            }
+            
+            // Initially hide connection status on landing page
+            window.connectionStatusManager?.hide();
+            
+            console.log('[Spectator] Integration initialized');
+        });
+    </script>
 </body>
 </html>
