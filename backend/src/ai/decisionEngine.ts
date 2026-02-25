@@ -3,9 +3,9 @@ import {
   getCachedDecision,
   setCachedDecision
 } from './cache/decisionCache';
+import { callOpenAIDecisionWithCircuit } from './circuit/openaiCircuit';
 import { buildDecisionPrompt, PROMPT_VERSION } from './prompts/decisionPrompt';
 import { callAnthropicDecision } from './providers/anthropicClient';
-import { callOpenAIDecision } from './providers/openaiClient';
 import { enqueueDecision } from './queue/decisionQueue';
 import { DecisionInput, DecisionOutput } from './types/decision';
 
@@ -52,7 +52,7 @@ export async function generateDecision(request: DecisionRequest): Promise<Decisi
     await consumeToken();
 
     try {
-      const decision = await callOpenAIDecision(input);
+      const decision = await callOpenAIDecisionWithCircuit(input);
       const result: DecisionResult = { provider: 'openai', decision };
       if (cacheKey) {
         setCachedDecision(cacheKey, result);
