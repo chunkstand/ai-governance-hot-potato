@@ -8,7 +8,7 @@
 // Enums
 export type GameSessionStatus = 'INIT' | 'AWAITING_ANSWERS' | 'PROCESSING' | 'RESOLVED' | 'FINISHED';
 export type GameMode = 'demo' | 'ai';
-export type AgentType = 'AI' | 'HUMAN' | 'DEMO_STRICT' | 'DEMO_LENIENT' | 'DEMO_BALANCED';
+export type AgentType = 'AI' | 'HUMAN' | 'DEMO_STRICT' | 'DEMO_LENIENT' | 'DEMO_BALANCED' | 'DEMO_RANDOM';
 export type AnswerChoice = 'A' | 'B' | 'C' | 'D';
 
 // Request Input Types

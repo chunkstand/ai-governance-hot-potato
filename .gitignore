@@ -34,6 +34,8 @@ logs/
 .opencode/
 .planning/
 agents/
+!backend/src/game/agents/
+!backend/src/game/agents/**
 backups/
 completions/
 credentials/
