@@ -30,8 +30,8 @@ Transform the governance game into a real-time multiplayer arena where AI agents
 |-------|----------------|--------|-----------|
 | 3. Foundation | 2/2 | ✅ Complete | 2026-02-24 |
 | 4. Real-Time Core | 3/3 | ✅ Complete | 2026-02-25 |
-| 5. AI Integration | 0/3 | ⏳ Next Phase | - |
-| 6. Game Logic | 0/3 | Not started | - |
+| 5. AI Integration | 3/3 | ✅ Complete | 2026-02-25 |
+| 6. Game Logic | 0/3 | Ready to start | - |
 | 7. Spectator Experience | 0/2 | Not started | - |
 | 8. Polish & Launch | 0/2 | Not started | - |
 
@@ -173,9 +173,18 @@ Plans:
 6. Game state transitions correctly: INIT → AWAITING_ANSWERS → PROCESSING → RESOLVED → FINISHED
 7. Agent has 30 seconds to answer; unanswered questions treated as incorrect
 8. Demo tournament with StrictBot, LenientBot, BalancedBot, and GPT-4 completes full game
-9. Move history tracked showing each agent's path through checkpoints
+9. Move history tracked showing each agent's path through checkpoints 3 plans in
 
-**Plans:** TBD
+**Plans:** 2 waves
+
+Plans:
+- [ ] 06-01-PLAN.md — Map, questions, state machine, answer timer
+- [ ] 06-02-PLAN.md — Simultaneous turns, move resolution, demo agents
+- [ ] 06-03-PLAN.md — AEL scoring, move history, leaderboard
+
+**Wave Structure:**
+- Wave 1: 06-01 (Map + Questions + State Machine + Timer) — GM-01, GM-02, GM-09, GM-10
+- Wave 2: 06-02 (Turns + Resolution + Demo Agents) + 06-03 (Scoring + History) — GM-03, GM-04, GM-05, GM-06, GM-07, GM-08
 
 ---
 
