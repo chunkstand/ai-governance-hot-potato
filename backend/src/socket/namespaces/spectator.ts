@@ -6,6 +6,7 @@ import {
   removeSpectator, 
   createMockGameState,
 } from '../gameStateManager';
+import { registerSocket, isAlive } from '../heartbeat';
 
 // Extended socket data interface
 interface SpectatorSocket extends Socket {
@@ -27,6 +28,9 @@ export function setupSpectatorNamespace(io: SocketIOServer): void {
 
   spectatorNamespace.on('connection', (socket: SpectatorSocket) => {
     console.log(`👁️  Spectator namespace connection: ${socket.id}`);
+    
+    // Register socket for heartbeat monitoring
+    registerSocket(socket);
 
     // Handle spectator joining a game room
     socket.on('watch-game', (data: { gameId: string }) => {
@@ -145,7 +149,9 @@ export function setupSpectatorNamespace(io: SocketIOServer): void {
       const roomName = socket.data.roomName;
       const gameId = socket.data.gameId;
       
-      console.log(`👁️  Spectator namespace disconnect: ${socket.id} - ${reason}`);
+      // Log heartbeat status on disconnect
+      const alive = isAlive(socket);
+      console.log(`👁️  Spectator namespace disconnect: ${socket.id} - ${reason} (heartbeat alive: ${alive})`);
       
       if (spectatorRoom && spectatorId && roomName) {
         // Remove spectator from game state
@@ -160,6 +166,11 @@ export function setupSpectatorNamespace(io: SocketIOServer): void {
           timestamp: new Date().toISOString()
         });
       }
+    });
+
+    // Handle session:leave (alias for stop-watching)
+    socket.on('session:leave', () => {
+      socket.emit('stop-watching');
     });
   });
 

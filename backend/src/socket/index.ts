@@ -3,6 +3,7 @@ import { Server as SocketIOServer } from 'socket.io';
 import { config } from '../config/index';
 import { setupGameNamespace } from './namespaces/game';
 import { setupSpectatorNamespace } from './namespaces/spectator';
+import { startHeartbeat, stopHeartbeat } from './heartbeat';
 
 let io: SocketIOServer | null = null;
 
@@ -40,7 +41,10 @@ export function initializeSocketServer(httpServer: HttpServer): SocketIOServer {
   setupGameNamespace(io);
   setupSpectatorNamespace(io);
 
-  console.log('✅ Socket.io initialized with game and spectator namespaces');
+  // Start heartbeat monitoring for connection health
+  startHeartbeat(io);
+
+  console.log('✅ Socket.io initialized with game and spectator namespaces (heartbeat active)');
   
   return io;
 }
@@ -64,6 +68,10 @@ export function closeSocketServer(): Promise<void> {
     }
 
     console.log('🔌 Closing Socket.io server...');
+    
+    // Stop heartbeat before closing
+    stopHeartbeat();
+    
     io.close(() => {
       console.log('✅ Socket.io server closed');
       io = null;

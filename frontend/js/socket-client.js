@@ -172,6 +172,12 @@ class SocketClient {
                 console.error('[SocketClient] Socket error:', error);
                 this._emit('error', error);
             });
+
+            // Server heartbeat ping
+            this.socket.on('ping', (data) => {
+                // Respond with pong immediately
+                this.socket.emit('pong', { timestamp: data.timestamp });
+            });
         });
     }
 

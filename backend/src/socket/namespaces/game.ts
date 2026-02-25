@@ -1,5 +1,6 @@
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import { createGameRoom, getRoomByGameId } from '../roomManager';
+import { registerSocket, isAlive } from '../heartbeat';
 
 // Extended socket data interface
 interface GameSocket extends Socket {
@@ -20,6 +21,9 @@ export function setupGameNamespace(io: SocketIOServer): void {
 
   gameNamespace.on('connection', (socket: GameSocket) => {
     console.log(`🎮 Game namespace connection: ${socket.id}`);
+    
+    // Register socket for heartbeat monitoring
+    registerSocket(socket);
 
     // Handle agent joining a game room
     socket.on('join-game', (data: { gameId: string; agentId: string }) => {
@@ -83,7 +87,9 @@ export function setupGameNamespace(io: SocketIOServer): void {
       const roomName = socket.data.roomName;
       const agentId = socket.data.agentId;
       
-      console.log(`🎮 Game namespace disconnect: ${socket.id} - ${reason}`);
+      // Log heartbeat status on disconnect
+      const alive = isAlive(socket);
+      console.log(`🎮 Game namespace disconnect: ${socket.id} - ${reason} (heartbeat alive: ${alive})`);
       
       if (roomName && agentId) {
         socket.to(roomName).emit('agent-disconnected', {
