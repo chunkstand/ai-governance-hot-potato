@@ -1,0 +1,383 @@
+/**
+ * Game State UI Styles
+ * Agent cards, question display, round info
+ */
+
+/* ============================================
+   GAME STATUS BADGE
+   ============================================ */
+
+.game-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.game-status-badge::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-init {
+    background: #e9ecef;
+    color: #495057;
+}
+.status-init::before { background: #6c757d; }
+
+.status-awaiting-answers {
+    background: #fff3cd;
+    color: #856404;
+}
+.status-awaiting-answers::before { 
+    background: #ffc107;
+    animation: pulse-yellow 1s infinite;
+}
+
+.status-processing {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+.status-processing::before { 
+    background: #17a2b8;
+    animation: pulse-blue 1s infinite;
+}
+
+.status-resolved {
+    background: #d4edda;
+    color: #155724;
+}
+.status-resolved::before { background: #28a745; }
+
+.status-finished {
+    background: #f8d7da;
+    color: #721c24;
+}
+.status-finished::before { background: #dc3545; }
+
+@keyframes pulse-blue {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ============================================
+   AGENT CARDS
+   ============================================ */
+
+#agents-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.agent-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: white;
+    border-radius: 10px;
+    border-left: 4px solid;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+.agent-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.agent-card.agent-leader {
+    background: linear-gradient(135deg, #fff9e6 0%, #fff 100%);
+    box-shadow: 0 2px 12px rgba(255, 193, 7, 0.2);
+}
+
+.agent-card.agent-leader .agent-rank {
+    background: #ffc107;
+    color: #333;
+}
+
+.agent-card.agent-disconnected {
+    opacity: 0.6;
+    filter: grayscale(0.5);
+}
+
+.agent-rank {
+    width: 32px;
+    height: 32px;
+    background: #e9ecef;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #495057;
+    flex-shrink: 0;
+}
+
+.agent-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.agent-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.agent-connection-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.agent-connection-status.online {
+    background: #28a745;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+}
+
+.agent-connection-status.offline {
+    background: #dc3545;
+}
+
+.agent-type {
+    font-size: 12px;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.agent-stats {
+    display: flex;
+    gap: 16px;
+    text-align: center;
+}
+
+.agent-position, .agent-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+.no-agents {
+    text-align: center;
+    color: #6c757d;
+    padding: 40px 20px;
+    font-style: italic;
+}
+
+/* ============================================
+   CURRENT QUESTION
+   ============================================ */
+
+#current-question {
+    margin-top: 20px;
+}
+
+.question-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.question-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.question-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.question-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.question-option:hover {
+    background: #e9ecef;
+}
+
+.option-letter {
+    width: 28px;
+    height: 28px;
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.option-text {
+    font-size: 14px;
+    color: #495057;
+}
+
+.no-question {
+    text-align: center;
+    color: #6c757d;
+    padding: 30px 20px;
+    font-style: italic;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+/* ============================================
+   ROUND INFO
+   ============================================ */
+
+#round-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.round-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+}
+
+.round-value {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* ============================================
+   GAME STATE PANEL
+   ============================================ */
+
+.game-state-panel {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.game-state-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.game-state-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .agent-card {
+        padding: 12px;
+    }
+    
+    .agent-name {
+        font-size: 14px;
+    }
+    
+    .agent-stats {
+        gap: 12px;
+    }
+    
+    .stat-value {
+        font-size: 18px;
+    }
+    
+    .question-text {
+        font-size: 14px;
+    }
+    
+    .question-option {
+        padding: 10px 12px;
+    }
+    
+    .option-letter {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+    
+    #round-info {
+        padding: 6px 12px;
+    }
+    
+    .round-value {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .agent-stats {
+        gap: 8px;
+    }
+    
+    .agent-rank {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    
+    .stat-value {
+        font-size: 16px;
+    }
+}

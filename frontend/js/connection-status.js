@@ -161,6 +161,19 @@ class ConnectionStatusManager {
             this._updateGameState(data);
         });
 
+        // Reconnection events
+        this.socketClient.on('reconnect:attempt', (data) => {
+            this._updateReconnectionStatus(data);
+        });
+
+        this.socketClient.on('reconnect:success', () => {
+            this._clearReconnectionStatus();
+        });
+
+        this.socketClient.on('reconnect:failed', () => {
+            this._showReconnectionFailed();
+        });
+
         // UI event listeners
         const toggleBtn = this.elements.spectatorPanel.querySelector('#spectator-toggle-btn');
         if (toggleBtn) {
@@ -288,6 +301,41 @@ class ConnectionStatusManager {
         // Could update turn indicator, agent badges, etc.
         // For now, just log to console (future enhancement)
         console.log('[ConnectionStatusManager] Game state updated:', data);
+        
+        // Update agent connection status in spectator list if available
+        if (data.agents && this.elements.spectatorPanel) {
+            this._emit('game:state', data);
+        }
+    }
+
+    /**
+     * Update reconnection status display
+     * @param {Object} data - Reconnection attempt data
+     */
+    _updateReconnectionStatus(data) {
+        const details = this.elements.statusContainer.querySelector('#connection-details');
+        if (details) {
+            const remaining = data.maxAttempts - data.attempt;
+            details.textContent = `Reconnecting... Attempt ${data.attempt} of ${data.maxAttempts} (${remaining} left)`;
+        }
+    }
+
+    /**
+     * Clear reconnection status (successful reconnect)
+     */
+    _clearReconnectionStatus() {
+        // Status will be updated by the main connection:state handler
+        console.log('[ConnectionStatusManager] Reconnection successful');
+    }
+
+    /**
+     * Show reconnection failed status
+     */
+    _showReconnectionFailed() {
+        const details = this.elements.statusContainer.querySelector('#connection-details');
+        if (details) {
+            details.textContent = 'Reconnection failed. Click "Reconnect Now" to try again.';
+        }
     }
 
     /**
