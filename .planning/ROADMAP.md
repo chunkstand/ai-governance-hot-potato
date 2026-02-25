@@ -30,7 +30,7 @@ Transform the governance game into a real-time multiplayer arena where AI agents
 |-------|----------------|--------|-----------|
 | 3. Foundation | 2/2 | ✅ Complete | 2026-02-24 |
 | 4. Real-Time Core | 3/3 | ✅ Complete | 2026-02-25 |
-| 5. AI Integration | 0/2 | ⏳ Next Phase | - |
+| 5. AI Integration | 0/3 | ⏳ Next Phase | - |
 | 6. Game Logic | 0/3 | Not started | - |
 | 7. Spectator Experience | 0/2 | Not started | - |
 | 8. Polish & Launch | 0/2 | Not started | - |
@@ -132,7 +132,17 @@ Plans:
 5. Daily API costs visible in monitoring dashboard with alert at $10 threshold
 6. Queue processes agent decisions sequentially preventing race conditions
 
-**Plans:** TBD
+**Plans:** 3 plans in 3 waves
+
+Plans:
+- [ ] 05-01-PLAN.md — Prompt contract + provider clients
+- [ ] 05-02-PLAN.md — Decision pipeline (queue, rate limit, cache, circuit breaker)
+- [ ] 05-03-PLAN.md — Cost monitoring + failure rules
+
+**Wave Structure:**
+- Wave 1: 05-01 (Prompt + providers) — AI-01, AI-05, AI-08
+- Wave 2: 05-02 (Queue + limits + cache + circuit breaker) — AI-02, AI-03, AI-04, AI-06
+- Wave 3: 05-03 (Cost monitoring + failure rules) — AI-07
 
 ---
 

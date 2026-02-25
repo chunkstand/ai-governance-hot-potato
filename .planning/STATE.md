@@ -1,7 +1,7 @@
 # Project State: AgentGameworks.com
 
 **Current Milestone:** v1.1 AI Arena  
-**Phase:** 04-real-time-core — All plans complete  
+**Phase:** 05-ai-integration — Plan 01 complete  
 **Last Updated:** 2026-02-25
 
 ---
@@ -12,7 +12,7 @@
 
 **Current Focus:** Transforming the v1.0 turn-based game into a real-time multiplayer arena with AI agents competing on a map, humans spectating.
 
-**Active Phase:** 04-real-time-core — Complete, ready for Phase 5 (AI Integration)
+**Active Phase:** 05-ai-integration — Plan 01 complete, ready for Plan 02
 
 ---
 
@@ -20,7 +20,10 @@
 
 ### Milestone: v1.1 AI Arena
 
-**Status:** Milestone complete
+**Status:** Ready to execute
+
+**Current Plan:** 2
+**Total Plans in Phase:** 3
 
 **Completed:**
 - v1.0 MVP shipped to GitHub Pages (2026-02-24)
@@ -32,16 +35,20 @@
 - **Phase 4 Plan 1: Socket.io Infrastructure** ✓ Socket.io server, /game and /spectator namespaces, room manager
 - **Phase 4 Plan 2: Frontend WebSocket Client** ✓ Connection status UI, spectator mode
 - **Phase 4 Plan 3: Game State Broadcast & Heartbeat** ✓ Server-authoritative state, 30s heartbeat, reconnection
+- **Phase 5 Plan 1: Prompt contract + provider clients** ✓ Deterministic prompt + OpenAI/Anthropic wrappers
 
 **In Progress:**
-- Phase 5: AI Integration — OpenAI/Anthropic API integration
+- Phase 5: AI Integration — Plan 02 (decision pipeline)
 
 **Next Up:**
-- Phase 5: AI Integration Plans 01-03 (AI provider setup, agent prompt architecture, decision engine)
+- Phase 5: AI Integration Plans 02-03 (decision pipeline, cost monitoring)
 - Phase 6: Game Logic (movement, scoring, turn resolution)
 
 ### Progress Bar
 
+**Progress:**
+
+[████████░░] 80%
 ```
 v1.1 AI Arena Milestone
 [██████░░░░░░░░░░░░░░] 30%
@@ -53,7 +60,8 @@ Phase 4: Real-Time Core       [██████████] 100% — Complete
   - 04-01: Socket.io Infrastructure ✓ Complete
   - 04-02: Frontend WebSocket Client ✓ Complete
   - 04-03: State Broadcast & Heartbeat ✓ Complete
-Phase 5: AI Integration       [░░░░░░░░░░] 0% — Pending
+Phase 5: AI Integration       [███░░░░░░░] 33% — In Progress
+  - 05-01: Prompt contract + provider clients ✓ Complete
 Phase 6: Game Logic           [░░░░░░░░░░] 0% — Pending
 Phase 7: Spectator Experience [░░░░░░░░░░] 0% — Pending
 Phase 8: Polish & Launch      [░░░░░░░░░░] 0% — Pending
@@ -80,6 +88,7 @@ Phase 8: Polish & Launch      [░░░░░░░░░░] 0% — Pending
 | Phase 04-real-time-core P01 | 2min | 3 tasks | 9 files |
 | Phase 04-real-time-core P02 | 2min | 3 tasks | 5 files |
 | Phase 04-real-time-core P03 | 6min | 4 tasks | 13 files |
+| Phase 05 P01 | 5 min | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -106,6 +115,7 @@ Phase 8: Polish & Launch      [░░░░░░░░░░] 0% — Pending
 | **CDN for Socket.io client** | Avoids build complexity | ✓ 04-02 Complete |
 | **Exponential backoff with jitter** | Prevents thundering herd on server restart | ✓ 04-03 Complete |
 | **Server-authoritative state** | Full broadcast ensures consistency | ✓ 04-03 Complete |
+- [Phase 05]: Pinned Anthropic provider to claude-3-5-sonnet-20241022 for stable Sonnet baseline
 
 ### Technical Stack (v1.1)
 
@@ -143,6 +153,10 @@ None. Phase 4 complete. Real-time infrastructure operational with server-authori
 ---
 
 ## Session Continuity
+
+**Last Session:** 2026-02-25T07:32:47.344Z
+**Stopped At:** Completed 05-01-PLAN.md
+**Resume File:** None
 
 ### Last Action
 - **04-03 Complete**: Server-authoritative game state broadcast with heartbeat/ping-pong and exponential backoff reconnection
