@@ -1,3 +1,5 @@
+import { getAgentTrail, getMoveHistory, type MoveRecord } from '../game/history/moveHistory';
+
 /**
  * GameState interface matching database schema
  * Full state representation for server-authoritative broadcasts
@@ -29,6 +31,7 @@ export interface GameState {
     id: string;
     joinedAt: Date;
   }>;
+  moveHistory?: MoveRecord[];
   lastBroadcastAt?: Date;
   round?: number;
 }
@@ -62,6 +65,7 @@ export function initializeGameState(
     agents: sessionData.agents || [],
     currentQuestion: sessionData.currentQuestion || null,
     spectators: sessionData.spectators || [],
+    moveHistory: sessionData.moveHistory || [],
     round: sessionData.round || 1,
     lastBroadcastAt: new Date(),
   };
@@ -126,6 +130,10 @@ export function updateGameState(
 
   if (updates.spectators) {
     currentState.spectators = updates.spectators;
+  }
+
+  if (updates.moveHistory !== undefined) {
+    currentState.moveHistory = updates.moveHistory;
   }
 
   if (updates.round !== undefined) {
@@ -264,11 +272,13 @@ export function broadcastGameState(
   }
 
   // Broadcast full state to all spectators
+  const recentHistory = getMoveHistory(gameId).slice(-20);
   const broadcastData = {
     gameSession: state.gameSession,
     agents: state.agents,
     currentQuestion: state.currentQuestion,
     spectators: state.spectators,
+    moveHistory: recentHistory,
     round: state.round,
     timestamp: new Date().toISOString(),
   };
@@ -373,6 +383,7 @@ export function createMockGameState(gameId: string = 'mock-game-001'): GameState
     agents: mockAgents,
     currentQuestion: mockQuestion,
     spectators: [],
+    moveHistory: [],
     round: 1,
     lastBroadcastAt: new Date(),
   };
@@ -400,6 +411,13 @@ export function getActiveGameCount(): number {
   return gameStateStore.size;
 }
 
+/**
+ * Get move trail for a single agent (spectator queries)
+ */
+export function getTrailForAgent(gameId: string, agentId: string): MoveRecord[] {
+  return getAgentTrail(gameId, agentId);
+}
+
 export default {
   initializeGameState,
   getCurrentState,
@@ -414,4 +432,5 @@ export default {
   createMockGameState,
   getActiveGameIds,
   getActiveGameCount,
+  getTrailForAgent,
 };
