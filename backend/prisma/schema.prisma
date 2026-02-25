@@ -52,6 +52,17 @@ model Decision {
   @@index([questionId])
 }
 
+model Question {
+  id            String   @id @default(uuid())
+  text          String
+  options       Json
+  correctAnswer String
+  pillar        String
+  createdAt     DateTime @default(now())
+
+  @@index([pillar])
+}
+
 model Move {
   id            String      @id @default(uuid())
   fromPosition  Int
