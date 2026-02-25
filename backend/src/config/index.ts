@@ -13,6 +13,7 @@ export interface Config {
   port: number;
   databaseUrl: string; // REQUIRED - no default
   corsOrigin: string; // REQUIRED - no default
+  socketCorsOrigin: string; // WebSocket CORS origin (defaults to corsOrigin)
   openaiApiKey: string | undefined; // Optional for now, required in Phase 5
   anthropicApiKey: string | undefined; // Optional for now, required in Phase 5
 }
@@ -131,11 +132,14 @@ export function validateConfig(): Config {
   }
 
   // All validations passed - return typed config
+  const validatedCorsOrigin = requireEnvVar('CORS_ORIGIN', corsOrigin);
+  
   return {
     nodeEnv: validateNodeEnv(nodeEnv),
     port: validatePort(portStr),
     databaseUrl: requireEnvVar('DATABASE_URL', databaseUrl),
-    corsOrigin: requireEnvVar('CORS_ORIGIN', corsOrigin),
+    corsOrigin: validatedCorsOrigin,
+    socketCorsOrigin: process.env.SOCKET_CORS_ORIGIN || validatedCorsOrigin,
     openaiApiKey: process.env.OPENAI_API_KEY,
     anthropicApiKey: process.env.ANTHROPIC_API_KEY
   };
