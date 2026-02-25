@@ -18,8 +18,8 @@ Requirements for AI Arena milestone. Each maps to roadmap phases.
 
 ### Real-time Communication (RTC)
 
-- [ ] **RTC-01**: Socket.io server with namespace/room support for game isolation
-- [ ] **RTC-02**: Spectator room implementation (`/spectator/:gameId`) for live viewing
+- [x] **RTC-01**: Socket.io server with namespace/room support for game isolation
+- [x] **RTC-02**: Spectator room implementation (`/spectator/:gameId`) for live viewing
 - [ ] **RTC-03**: WebSocket client integration in existing frontend HTML/JS
 - [ ] **RTC-04**: Server-authoritative game state broadcast to all connected spectators
 - [ ] **RTC-05**: 30-second heartbeat/ping-pong for connection health monitoring
@@ -109,8 +109,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INF-04 | Phase 3 | Complete |
 | INF-05 | Phase 3 | Complete |
 | INF-06 | Phase 3 | Pending |
-| RTC-01 | Phase 4 | Pending |
-| RTC-02 | Phase 4 | Pending |
+| RTC-01 | Phase 4 | Complete |
+| RTC-02 | Phase 4 | Complete |
 | RTC-03 | Phase 4 | Pending |
 | RTC-04 | Phase 4 | Pending |
 | RTC-05 | Phase 4 | Pending |

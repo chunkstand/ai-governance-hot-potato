@@ -1,8 +1,8 @@
 # Project State: AgentGameworks.com
 
 **Current Milestone:** v1.1 AI Arena  
-**Phase:** 03-foundation — Plan 02 complete  
-**Last Updated:** 2026-02-24
+**Phase:** 04-real-time-core — Plan 01 complete  
+**Last Updated:** 2026-02-25
 
 ---
 
@@ -12,7 +12,7 @@
 
 **Current Focus:** Transforming the v1.0 turn-based game into a real-time multiplayer arena with AI agents competing on a map, humans spectating.
 
-**Active Phase:** 03-foundation — Backend infrastructure complete, ready for Phase 4
+**Active Phase:** 04-real-time-core — Socket.io infrastructure complete, ready for frontend client and state broadcast
 
 ---
 
@@ -29,24 +29,28 @@
 - Roadmap created (6 phases: 3-8)
 - **Phase 3 Plan 1: Backend Infrastructure** ✓ Express server, Prisma schema, Render config
 - **Phase 3 Plan 2: CORS & API Documentation** ✓ CORS middleware, OpenAPI spec, Swagger UI, API endpoints
+- **Phase 4 Plan 1: Socket.io Infrastructure** ✓ Socket.io server, /game and /spectator namespaces, room manager
 
 **In Progress:**
-- None - Phase 3 foundation complete
+- Phase 4: Real-Time Core — Frontend WebSocket client and connection status UI
 
 **Next Up:**
-- Phase 4: Real-Time Core (Socket.io, rooms, game state machine)
+- Phase 4: Real-Time Core Plans 02-03 (frontend client, state broadcast, heartbeat)
 - Phase 5: AI Integration (OpenAI/Anthropic APIs)
 
 ### Progress Bar
 
 ```
 v1.1 AI Arena Milestone
-[░░░░░░░░░░░░░░░░░░░░] 0%
+[███░░░░░░░░░░░░░░░░░] 15%
 
 Phase 3: Foundation           [██████████] 100% — Complete ✓
   - 03-01: Backend Infrastructure ✓ Complete
   - 03-02: CORS & API Documentation ✓ Complete
-Phase 4: Real-Time Core       [░░░░░░░░░░] 0% — Next
+Phase 4: Real-Time Core       [███░░░░░░░] 30% — In Progress
+  - 04-01: Socket.io Infrastructure ✓ Complete
+  - 04-02: Frontend WebSocket Client ⏳ In Progress
+  - 04-03: State Broadcast & Heartbeat ⏳ Pending
 Phase 5: AI Integration       [░░░░░░░░░░] 0% — Pending
 Phase 6: Game Logic           [░░░░░░░░░░] 0% — Pending
 Phase 7: Spectator Experience [░░░░░░░░░░] 0% — Pending
@@ -71,6 +75,7 @@ Phase 8: Polish & Launch      [░░░░░░░░░░] 0% — Pending
 |-------|----------|-------|-------|
 | Phase 03-foundation P01 | 8min | 5 tasks | 14 files |
 | Phase 03-foundation P02 | 65min | 5 tasks | 11 files |
+| Phase 04-real-time-core P01 | 2min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -90,22 +95,25 @@ Phase 8: Polish & Launch      [░░░░░░░░░░] 0% — Pending
 | **Health check monitors DB** | Enable auto-rollback on Render | ✓ 03-01 Complete |
 | **Custom CORS middleware** | Fine-grained origin control, multiple origins support | ✓ 03-02 Complete |
 | **OpenAPI-first API design** | Clear contract for Phase 7 frontend development | ✓ 03-02 Complete |
-| **Vitest + Supertest** | Modern test framework for CORS/API integration tests | ✓ 03-02 Complete |
+| **Socket.io over native WebSocket** | Auto reconnection, rooms, fallbacks | ✓ 04-01 Complete |
+| **Separate namespaces (/game, /spectator)** | Keeps concerns isolated | ✓ 04-01 Complete |
+| **Sequential room naming** | game:XXX format for human readability | ✓ 04-01 Complete |
+| **Socket.io attached to HTTP server** | Same port simplifies deployment | ✓ 04-01 Complete |
 
 ### Technical Stack (v1.1)
 
 - **Runtime:** Node.js 20.x LTS
 - **Web Framework:** Express 4.x
 - **Database:** PostgreSQL 15+ with Prisma 5.x ORM
-- **Real-Time:** Socket.io 4.8.x (Phase 4)
+- **Real-Time:** Socket.io 4.8.3 ✓ Installed and operational
 - **AI APIs:** OpenAI 4.98.x + Anthropic SDK 0.50.x (Phase 5)
 - **Queue:** p-queue (initial) / BullMQ (scale)
 - **Hosting:** Render (backend) + GitHub Pages (static frontend)
 
 ### Critical Pitfalls Avoided
 
-1. **WebSocket Connection Leaks** → Heartbeat/ping-pong in Phase 4
-2. **Reconnection Storms** → Exponential backoff with jitter in Phase 4
+1. **WebSocket Connection Leaks** → Heartbeat/ping-pong in Phase 4 Plan 03
+2. **Reconnection Storms** → Exponential backoff with jitter in Phase 4 Plan 03
 3. **API Cost Explosion** → Rate limiting + caching + circuit breaker in Phase 5
 4. **State Desynchronization** → Server-authoritative architecture in Phase 4
 5. **Race Conditions** → Sequential processing queue in Phase 5
@@ -123,33 +131,33 @@ Phase 8: Polish & Launch      [░░░░░░░░░░] 0% — Pending
 
 ### Blockers
 
-None. Phase 3 (Foundation) complete. Ready for Phase 4 (Real-Time Core).
+None. Phase 4 Plan 1 (Socket.io Infrastructure) complete. Continuing with Plan 2 (Frontend Client).
 
 ---
 
 ## Session Continuity
 
 ### Last Action
-- **03-02 Complete**: CORS configuration, OpenAPI documentation, API endpoints
-- Created 5 task commits: CORS middleware, OpenAPI spec, API endpoints, CORS tests, documentation
-- All 2 requirements completed: INF-03, INF-06
-- Backend foundation ready for WebSocket and game features
+- **04-01 Complete**: Socket.io infrastructure with /game and /spectator namespaces
+- Created 3 task commits: Socket.io installation, namespace setup, Express integration
+- Requirements completed: RTC-01, RTC-02
+- Backend ready for WebSocket client connections
 
 ### Next Actions
-1. Execute `/gsd-plan-phase 4` — Real-Time Core planning
-2. Deploy backend to Render (manual step - see 03-USER-SETUP.md)
-3. Begin Socket.io implementation
+1. Execute Phase 4 Plan 2 — Frontend WebSocket client and connection status UI
+2. Execute Phase 4 Plan 3 — State broadcast, heartbeat, reconnection resilience
+3. Deploy backend to Render (manual step - see 03-USER-SETUP.md)
 
 ### Context Summary
 
 **Where we are:**  
-Phase 3 (Foundation) complete. Backend has Express server with CORS configured for GitHub Pages, OpenAPI documentation at /docs, REST API endpoints for game session management, and comprehensive test coverage. Ready to build real-time features.
+Phase 4 Plan 1 complete. Socket.io server operational with /game and /spectator namespaces, room manager with sequential naming (game:XXX), and Express integration. Backend ready for WebSocket client connections.
 
 **Where we're going:**  
-Phase 4: Real-Time Core — WebSocket infrastructure with Socket.io, room isolation for game sessions, spectator viewing endpoints, and connection management (heartbeat, reconnection).
+Phase 4 Plans 2-3: Frontend WebSocket client integration, connection status UI, game state broadcast, heartbeat/ping-pong for connection health, and exponential backoff reconnection.
 
 **What matters now:**  
-Deploying the backend to Render and beginning Socket.io implementation for real-time gameplay. The API contract documented in OpenAPI will guide Phase 7 frontend development.
+Connecting the frontend HTML/JS to the Socket.io backend via WebSocket client, implementing connection status indicators, and adding server-authoritative game state broadcast for spectators.
 
 ---
 
@@ -161,6 +169,7 @@ Deploying the backend to Render and beginning Socket.io implementation for real-
 - Research: `.planning/research/SUMMARY.md`
 - Milestones: `.planning/MILESTONES.md`
 - **03-01 Summary:** `.planning/phases/03-foundation/03-01-SUMMARY.md`
+- **04-01 Summary:** `.planning/phases/04-real-time-core/04-01-SUMMARY.md`
 
 **Key Commands:**
 ```bash

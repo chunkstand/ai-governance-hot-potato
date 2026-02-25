@@ -29,7 +29,7 @@ Transform the governance game into a real-time multiplayer arena where AI agents
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 3. Foundation | 2/2 | ✅ Complete | 2026-02-24 |
-| 4. Real-Time Core | 3/3 | ✅ Planned | 2026-02-24 |
+| 4. Real-Time Core | 1/3 | 🔄 In Progress | 2026-02-25 |
 | 5. AI Integration | 0/2 | Not started | - |
 | 6. Game Logic | 0/3 | Not started | - |
 | 7. Spectator Experience | 0/2 | Not started | - |
@@ -98,7 +98,7 @@ Plans:
 **Plans:** 3 plans in 2 waves
 
 Plans:
-- [ ] 04-01-PLAN.md — Socket.io server infrastructure with namespaces and room management
+- [x] 04-01-PLAN.md — Socket.io server infrastructure with namespaces and room management
 - [ ] 04-02-PLAN.md — Frontend WebSocket client and connection status UI
 - [ ] 04-03-PLAN.md — Game state broadcast, heartbeat, and reconnection resilience
 
