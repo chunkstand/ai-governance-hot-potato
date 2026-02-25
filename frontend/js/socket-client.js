@@ -11,6 +11,11 @@ class SocketClient {
         this.eventHandlers = new Map();
         this.spectators = new Map(); // Map of spectatorId -> spectatorData
         this.backendUrl = this._detectBackendUrl();
+        
+        // Reconnection state tracking
+        this.reconnectionAttempt = 0;
+        this.maxReconnectionAttempts = 10;
+        this.reconnectionDelay = 0;
     }
 
     /**
@@ -64,9 +69,10 @@ class SocketClient {
             const options = {
                 transports: ['websocket', 'polling'],
                 reconnection: true,
-                reconnectionAttempts: 5,
-                reconnectionDelay: 1000,
-                reconnectionDelayMax: 5000,
+                reconnectionAttempts: 10, // Max 10 retries per RTC-06
+                reconnectionDelay: 1000, // Initial 1 second (will be randomized 1-3s)
+                reconnectionDelayMax: 30000, // Cap at 30 seconds
+                randomizationFactor: 0.5, // 50% jitter (matches server algorithm)
                 timeout: 10000,
             };
 
@@ -106,25 +112,41 @@ class SocketClient {
                 console.log('[SocketClient] Reconnected after', attemptNumber, 'attempts');
                 this.isConnected = true;
                 this.connectionState = 'connected';
+                this.reconnectionAttempt = 0; // Reset on successful reconnect
+                this.reconnectionDelay = 0;
                 this._emitStateChange();
+                this._emit('reconnect:success', { attempt: attemptNumber });
             });
 
             this.socket.on('reconnect_attempt', (attemptNumber) => {
-                console.log('[SocketClient] Reconnection attempt', attemptNumber);
+                this.reconnectionAttempt = attemptNumber;
+                // Calculate exponential backoff delay
+                this.reconnectionDelay = Math.min(1000 * Math.pow(2, attemptNumber), 30000);
+                console.log('[SocketClient] Reconnection attempt', attemptNumber, 'next delay:', this.reconnectionDelay);
                 this.connectionState = 'reconnecting';
                 this._emitStateChange();
+                this._emit('reconnect:attempt', { 
+                    attempt: attemptNumber, 
+                    maxAttempts: this.maxReconnectionAttempts,
+                    delay: this.reconnectionDelay 
+                });
             });
 
             this.socket.on('reconnect_error', (error) => {
                 console.error('[SocketClient] Reconnection error:', error.message);
                 this.connectionState = 'error';
                 this._emitStateChange();
+                this._emit('reconnect:error', { error: error.message, attempt: this.reconnectionAttempt });
             });
 
             this.socket.on('reconnect_failed', () => {
                 console.error('[SocketClient] Reconnection failed after max attempts');
                 this.connectionState = 'error';
                 this._emitStateChange();
+                this._emit('reconnect:failed', { 
+                    attempts: this.maxReconnectionAttempts,
+                    manualRetryAvailable: true 
+                });
             });
 
             // Spectator-specific events
@@ -303,7 +325,12 @@ class SocketClient {
             isConnected: this.isConnected,
             backendUrl: this.backendUrl,
             spectatorCount: this.spectators.size,
-            spectators: Array.from(this.spectators.values())
+            spectators: Array.from(this.spectators.values()),
+            // Reconnection state
+            reconnectionAttempt: this.reconnectionAttempt,
+            maxReconnectionAttempts: this.maxReconnectionAttempts,
+            reconnectionDelay: this.reconnectionDelay,
+            remainingAttempts: this.maxReconnectionAttempts - this.reconnectionAttempt
         };
     }
 }
