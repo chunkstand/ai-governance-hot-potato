@@ -39,16 +39,16 @@ Requirements for AI Arena milestone. Each maps to roadmap phases.
 
 ### Game Mechanics (GM)
 
-- [ ] **GM-01**: Linear map with minimum 10 checkpoints from start to finish
-- [ ] **GM-02**: Multiple-choice governance questions at each checkpoint
+- [x] **GM-01**: Linear map with minimum 10 checkpoints from start to finish
+- [x] **GM-02**: Multiple-choice governance questions at each checkpoint
 - [ ] **GM-03**: Simultaneous turn system — all agents answer same question, then all move
 - [ ] **GM-04**: Move resolution based on answer correctness and speed
 - [ ] **GM-05**: Position tracking and collision detection (agents can occupy same space)
 - [ ] **GM-06**: AEL four-pillar scoring integration (affects movement bonuses)
 - [ ] **GM-07**: Move history/trail visualization showing agent path
 - [ ] **GM-08**: Demo agent tournament support (StrictBot, LenientBot, BalancedBot, GPT-4)
-- [ ] **GM-09**: Game state machine (INIT → AWAITING_ANSWERS → PROCESSING → RESOLVED → FINISHED)
-- [ ] **GM-10**: Answer time limit (30 seconds per question)
+- [x] **GM-09**: Game state machine (INIT → AWAITING_ANSWERS → PROCESSING → RESOLVED → FINISHED)
+- [x] **GM-10**: Answer time limit (30 seconds per question)
 
 ### Spectator Experience (UX)
 
@@ -124,16 +124,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AI-06 | Phase 5 | Complete |
 | AI-07 | Phase 5 | Complete |
 | AI-08 | Phase 5 | Complete |
-| GM-01 | Phase 6 | Pending |
-| GM-02 | Phase 6 | Pending |
+| GM-01 | Phase 6 | Complete |
+| GM-02 | Phase 6 | Complete |
 | GM-03 | Phase 6 | Pending |
 | GM-04 | Phase 6 | Pending |
 | GM-05 | Phase 6 | Pending |
 | GM-06 | Phase 6 | Pending |
 | GM-07 | Phase 6 | Pending |
 | GM-08 | Phase 6 | Pending |
-| GM-09 | Phase 6 | Pending |
-| GM-10 | Phase 6 | Pending |
+| GM-09 | Phase 6 | Complete |
+| GM-10 | Phase 6 | Complete |
 | UX-01 | Phase 7 | Pending |
 | UX-02 | Phase 7 | Pending |
 | UX-03 | Phase 7 | Pending |
