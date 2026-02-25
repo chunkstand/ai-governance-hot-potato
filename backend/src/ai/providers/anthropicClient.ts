@@ -2,7 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { config } from '../../config';
 import { buildDecisionPrompt, DecisionPromptMode } from '../prompts/decisionPrompt';
 import { DecisionInput, DecisionOutput } from '../types/decision';
-import { validateDecisionOutput } from '../validation/decisionValidator';
+import { DecisionOutputValidationError, validateDecisionOutput } from '../validation/decisionValidator';
 import { ProviderUsage } from '../cost/costTypes';
 
 const ANTHROPIC_MODEL = 'claude-3-5-sonnet-20241022';
@@ -52,11 +52,6 @@ export async function callAnthropicDecision(
     throw new Error('Anthropic response missing text content');
   }
 
-  const validation = validateDecisionOutput(outputText);
-  if (!validation.ok) {
-    throw new Error(`Anthropic response failed validation: ${JSON.stringify(validation.errors)}`);
-  }
-
   const usage: ProviderUsage = {
     inputTokens: response.usage?.input_tokens ?? 0,
     outputTokens: response.usage?.output_tokens ?? 0,
@@ -65,6 +60,15 @@ export async function callAnthropicDecision(
         ? response.usage.input_tokens + response.usage.output_tokens
         : (response.usage?.input_tokens ?? 0) + (response.usage?.output_tokens ?? 0)
   };
+
+  const validation = validateDecisionOutput(outputText);
+  if (!validation.ok) {
+    throw new DecisionOutputValidationError(validation.errors, {
+      provider: 'anthropic',
+      usage,
+      outputText
+    });
+  }
 
   return { decision: validation.value, usage };
 }

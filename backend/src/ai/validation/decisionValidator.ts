@@ -1,8 +1,28 @@
 import { AnswerChoice, DecisionAlternative, DecisionOutput } from '../types/decision';
+import { AIProvider, ProviderUsage } from '../cost/costTypes';
 
 export interface DecisionValidationError {
   field: string;
   message: string;
+}
+
+export class DecisionOutputValidationError extends Error {
+  readonly errors: DecisionValidationError[];
+  readonly provider?: AIProvider;
+  readonly usage?: ProviderUsage;
+  readonly outputText?: string;
+
+  constructor(
+    errors: DecisionValidationError[],
+    context?: { provider?: AIProvider; usage?: ProviderUsage; outputText?: string }
+  ) {
+    super(`Decision output failed validation: ${JSON.stringify(errors)}`);
+    this.name = 'DecisionOutputValidationError';
+    this.errors = errors;
+    this.provider = context?.provider;
+    this.usage = context?.usage;
+    this.outputText = context?.outputText;
+  }
 }
 
 export type DecisionValidationResult =
