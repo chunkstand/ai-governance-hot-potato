@@ -107,7 +107,11 @@ export function resolveTurn(gameId: string): void {
   });
 
   const answers = collectAnswers(gameId);
-  const moveResults = resolveMoves(answers, turn.question, gameId);
+  const answerRecords = answers.map(answer => ({
+    ...answer,
+    currentPosition: currentState.agents.find(agent => agent.id === answer.agentId)?.position ?? 0
+  }));
+  const moveResults = resolveMoves(answerRecords, turn.question, gameId);
 
   const updatedAgents = currentState.agents.map(agent => {
     const move = moveResults.find(result => result.agentId === agent.id);

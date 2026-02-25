@@ -1,5 +1,13 @@
-import { AnswerChoice, GovernancePillar, Question } from '../questions/questionBank';
+import type { AnswerChoice, GovernancePillar, Question } from '../questions/questionBank';
 import { getAgentPosition, updatePosition } from '../position/positionTracker';
+import {
+  GOVERNANCE_PILLAR_TO_AEL,
+  Pillar,
+  applyMovementBonus,
+  calculatePillarScore,
+  type PillarScores
+} from '../scoring/aelScoring';
+import { updateScore } from '../scoring/gameScorer';
 
 export interface MoveResult {
   agentId: string;
@@ -9,23 +17,35 @@ export interface MoveResult {
   isCorrect: boolean;
   timeMs: number;
   bonus: number;
+  checkpoint: number;
+  pillarScores: PillarScores;
 }
 
 export interface AnswerRecord {
   agentId: string;
   answer: AnswerChoice;
   timeMs: number;
+  currentPosition?: number;
 }
 
-const PILLAR_ALIGNMENT: Record<AnswerChoice, GovernancePillar> = {
-  A: 'User Consent & Safety',
-  B: 'Transparency & Accountability',
-  C: 'Fairness & Inclusion',
-  D: 'Alignment & Control'
-};
+function buildPillarScores(answer: AnswerChoice, pillar: Pillar): PillarScores {
+  const score = calculatePillarScore(answer, pillar);
+  return {
+    [Pillar.USER_CONSENT_SAFETY]: pillar === Pillar.USER_CONSENT_SAFETY ? score : 0,
+    [Pillar.TRANSPARENCY_ACCOUNTABILITY]: pillar === Pillar.TRANSPARENCY_ACCOUNTABILITY ? score : 0,
+    [Pillar.FAIRNESS_INCLUSION]: pillar === Pillar.FAIRNESS_INCLUSION ? score : 0,
+    [Pillar.ALIGNMENT_CONTROL]: pillar === Pillar.ALIGNMENT_CONTROL ? score : 0
+  };
+}
 
-function isPillarAligned(answer: AnswerChoice, pillar: GovernancePillar): boolean {
-  return PILLAR_ALIGNMENT[answer] === pillar;
+function calculateBaseSpaces(isCorrect: boolean, timeMs: number): number {
+  if (!isCorrect) {
+    return 0;
+  }
+  if (timeMs < 10000) {
+    return 2;
+  }
+  return 1;
 }
 
 export function calculateMove(
@@ -37,21 +57,13 @@ export function calculateMove(
   fromPosition: number = 0
 ): MoveResult {
   const isCorrect = answer === correctAnswer;
-  let spacesMoved = 0;
-  let bonus = 0;
+  const baseSpaces = calculateBaseSpaces(isCorrect, timeMs);
+  const aelPillar = GOVERNANCE_PILLAR_TO_AEL[pillar];
+  const pillarScores = buildPillarScores(answer, aelPillar);
 
-  if (isCorrect) {
-    if (timeMs < 10000) {
-      spacesMoved = 2;
-    } else if (timeMs <= 20000) {
-      spacesMoved = 1;
-      bonus = 0.5;
-    } else {
-      spacesMoved = 1;
-    }
-  } else if (isPillarAligned(answer, pillar)) {
-    spacesMoved = 1;
-  }
+  const rawSpaces = applyMovementBonus(baseSpaces, pillarScores, isCorrect);
+  const spacesMoved = Math.max(0, Math.round(rawSpaces));
+  const bonus = rawSpaces - baseSpaces;
 
   return {
     agentId,
@@ -60,7 +72,9 @@ export function calculateMove(
     spacesMoved,
     isCorrect,
     timeMs,
-    bonus
+    bonus,
+    checkpoint: fromPosition + spacesMoved,
+    pillarScores
   };
 }
 
@@ -70,9 +84,8 @@ export function resolveMoves(
   gameId?: string
 ): MoveResult[] {
   return answers.map(answer => {
-    const currentPosition = gameId
-      ? getAgentPosition(gameId, answer.agentId)?.checkpoint ?? 0
-      : 0;
+    const currentPosition = answer.currentPosition
+      ?? (gameId ? getAgentPosition(gameId, answer.agentId)?.checkpoint ?? 0 : 0);
 
     const moveResult = calculateMove(
       answer.answer,
@@ -85,6 +98,12 @@ export function resolveMoves(
 
     if (gameId) {
       updatePosition(gameId, answer.agentId, moveResult.toPosition);
+      updateScore(gameId, answer.agentId, {
+        checkpoint: moveResult.checkpoint,
+        pillarScores: moveResult.pillarScores,
+        timeMs: moveResult.timeMs,
+        isCorrect: moveResult.isCorrect
+      });
     }
 
     return moveResult;
