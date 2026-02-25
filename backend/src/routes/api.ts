@@ -400,6 +400,7 @@ function getDefaultColor(type: AgentType): string {
     'DEMO_STRICT': '#E74C3C',    // Red
     'DEMO_LENIENT': '#2ECC71',   // Green
     'DEMO_BALANCED': '#F39C12',  // Orange
+    'DEMO_RANDOM': '#1ABC9C',    // Teal
   };
   return colors[type] || '#95A5A6'; // Default gray
 }
