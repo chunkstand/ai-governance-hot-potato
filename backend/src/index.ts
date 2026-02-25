@@ -7,6 +7,7 @@ import { healthRouter } from './routes/health';
 import { corsMiddleware } from './middleware/cors';
 import { apiRouter } from './routes/api';
 import { docsRouter } from './routes/docs';
+import { initializeSocketServer, closeSocketServer } from './socket/index';
 
 // Validate configuration before starting server
 // This implements fail-fast behavior - server refuses to start with invalid config
@@ -66,9 +67,16 @@ const server = app.listen(config.port, () => {
   console.log(`🔗 Health check: http://localhost:${config.port}/health`);
 });
 
+// Initialize Socket.io server
+initializeSocketServer(server);
+
 // Graceful shutdown handler
-const gracefulShutdown = (signal: string) => {
+const gracefulShutdown = async (signal: string) => {
   console.log(`\n${signal} received. Starting graceful shutdown...`);
+  
+  // Close Socket.io server first (to disconnect clients gracefully)
+  await closeSocketServer();
+  
   server.close(() => {
     console.log('✅ HTTP server closed');
     process.exit(0);
