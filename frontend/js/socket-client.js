@@ -90,7 +90,7 @@ class SocketClient {
 
             // Connection events
             this.socket.on('connect', () => {
-                console.log('[SocketClient] Connected to spectator namespace');
+                console.log('[SocketClient] ✅ Connected to spectator namespace');
                 this.isConnected = true;
                 this.connectionState = 'connected';
                 this._emitStateChange();
@@ -101,6 +101,22 @@ class SocketClient {
                 }
 
                 resolve(this.socket);
+            });
+
+            this.socket.on('disconnect', (reason) => {
+                console.log('[SocketClient] ❌ Disconnected:', reason);
+                this.isConnected = false;
+                this.connectionState = 'disconnected';
+                this._emitStateChange();
+            });
+
+            this.socket.on('connect_error', (error) => {
+                const errMsg = error?.message || error?.type || String(error) || 'Unknown error';
+                console.error('[SocketClient] ⚠️ Connection error:', errMsg);
+                this._lastError = errMsg;
+                this.connectionState = 'error';
+                this._emitStateChange();
+                reject(new Error(errMsg));
             });
 
             this.socket.io.on('error', (error) => {
