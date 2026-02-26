@@ -79,6 +79,12 @@ class SocketClient {
 
             // Connect to /spectator namespace
             console.log('[SocketClient] Attempting to connect to:', `${this.backendUrl}/spectator`);
+            console.log('[SocketClient] Full URL:', `${this.backendUrl}/spectator?transport=polling`);
+            
+            // Try connecting to root namespace first for debugging
+            // this.socket = io(this.backendUrl, options);
+            
+            // Then try spectator namespace
             this.socket = io(`${this.backendUrl}/spectator`, options);
 
             // Connection events
