@@ -78,6 +78,7 @@ class SocketClient {
             };
 
             // Connect to /spectator namespace
+            console.log('[SocketClient] Attempting to connect to:', `${this.backendUrl}/spectator`);
             this.socket = io(`${this.backendUrl}/spectator`, options);
 
             // Connection events
@@ -93,6 +94,14 @@ class SocketClient {
                 }
 
                 resolve(this.socket);
+            });
+
+            this.socket.io.on('error', (error) => {
+                console.error('[SocketClient] Socket.IO error:', error);
+            });
+
+            this.socket.io.on('reconnect_attempt', (attempt) => {
+                console.log('[SocketClient] Reconnect attempt:', attempt);
             });
 
             this.socket.on('disconnect', (reason) => {
