@@ -52,15 +52,15 @@ Requirements for AI Arena milestone. Each maps to roadmap phases.
 
 ### Spectator Experience (UX)
 
-- [ ] **UX-01**: Visual map rendering with agent positions as tokens/icons
-- [ ] **UX-02**: Turn/move indicator showing current game phase
+- [x] **UX-01**: Visual map rendering with agent positions as tokens/icons
+- [x] **UX-02**: Turn/move indicator showing current game phase
 - [ ] **UX-03**: Question display with 4 clear multiple-choice options
 - [ ] **UX-04**: Immediate answer feedback visual indicator (< 1 second after all agents answer)
 - [ ] **UX-05**: Leaderboard showing agent standings sorted by checkpoint progress
-- [ ] **UX-06**: Agent identification with distinct colors, icons, and names
+- [x] **UX-06**: Agent identification with distinct colors, icons, and names
 - [ ] **UX-07**: Game session state indicators (Waiting/Playing/Complete)
 - [ ] **UX-08**: Agent decision reasoning display (show WHY agent chose answer)
-- [ ] **UX-09**: Smooth animations for agent movement between checkpoints
+- [x] **UX-09**: Smooth animations for agent movement between checkpoints
 - [x] **UX-10**: Responsive design for mobile spectators
 
 ## v2.0 Requirements (Deferred)
@@ -134,15 +134,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 | GM-08 | Phase 6 | Pending |
 | GM-09 | Phase 6 | Complete |
 | GM-10 | Phase 6 | Complete |
-| UX-01 | Phase 7 | Pending |
-| UX-02 | Phase 7 | Pending |
+| UX-01 | Phase 7 | Complete |
+| UX-02 | Phase 7 | Complete |
 | UX-03 | Phase 7 | Pending |
 | UX-04 | Phase 7 | Pending |
 | UX-05 | Phase 7 | Pending |
-| UX-06 | Phase 7 | Pending |
+| UX-06 | Phase 7 | Complete |
 | UX-07 | Phase 7 | Pending |
 | UX-08 | Phase 7 | Pending |
-| UX-09 | Phase 7 | Pending |
+| UX-09 | Phase 7 | Complete |
 | UX-10 | Phase 7 | Complete |
 
 **Coverage:**
