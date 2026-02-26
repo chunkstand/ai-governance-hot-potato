@@ -90,14 +90,15 @@ function updateConnectionOverlay(connectionState) {
         error: {
             title: 'Connection Error',
             message: 'Server connection failed. Please refresh to retry.',
+            details: socketClient?._lastError || 'Check console for details',
         },
     };
 
-    const { title, message } = messages[status] || messages.disconnected;
+    const { title, message, details } = messages[status] || messages.disconnected;
 
     if (ui.connectionTitle) ui.connectionTitle.textContent = title;
     if (ui.connectionMessage) ui.connectionMessage.textContent = message;
-    if (ui.connectionStatus) ui.connectionStatus.textContent = `Status: ${statusText}`;
+    if (ui.connectionStatus) ui.connectionStatus.textContent = `Status: ${statusText}` + (details ? ` | ${details}` : '');
 
     setOverlayVisibility(ui.connectionOverlay, status !== 'connected');
 }

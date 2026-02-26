@@ -11,6 +11,7 @@ class SocketClient {
         this.eventHandlers = new Map();
         this.spectators = new Map(); // Map of spectatorId -> spectatorData
         this.backendUrl = this._detectBackendUrl();
+        this._lastError = null;
         
         // Reconnection state tracking
         this.reconnectionAttempt = 0;
@@ -103,6 +104,7 @@ class SocketClient {
 
             this.socket.on('connect_error', (error) => {
                 console.error('[SocketClient] Connection error:', error.message);
+                this._lastError = error.message;
                 this.connectionState = 'error';
                 this._emitStateChange();
                 reject(error);
