@@ -38,11 +38,11 @@ class SocketClient {
 
         // Staging environment
         if (hostname.includes('staging') || hostname.includes('dev')) {
-            return 'https://ai-arena-backend-staging.onrender.com';
+            return 'https://agentgameworks.onrender.com';
         }
 
         // Production environment (GitHub Pages or custom domain)
-        return 'https://ai-arena-backend-staging.onrender.com';
+        return 'https://agentgameworks.onrender.com';
     }
 
     /**
