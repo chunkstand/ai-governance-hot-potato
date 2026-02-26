@@ -118,14 +118,12 @@ class SocketClient {
             });
 
             this.socket.on('connect_error', (error) => {
-                console.error('[SocketClient] Connection error:', error);
-                console.error('[SocketClient] Error message:', error.message);
-                console.error('[SocketClient] Error type:', error.type);
-                console.error('[SocketClient] Error description:', error.description);
-                this._lastError = error.message || error.type || 'Unknown connection error';
+                const errMsg = error?.message || error?.type || String(error) || 'Unknown error';
+                console.error('[SocketClient] Connection error:', errMsg);
+                this._lastError = errMsg;
                 this.connectionState = 'error';
                 this._emitStateChange();
-                reject(error);
+                reject(new Error(errMsg));
             });
 
             this.socket.on('reconnect', (attemptNumber) => {
