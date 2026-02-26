@@ -7,8 +7,8 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "install-all": "npm install",
-    "build": "npm install && npm run db:generate && tsc",
+    "install-all": "npm install --include=dev",
+    "build": "npm install --include=dev && npm run db:generate && tsc",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
     "db:generate": "prisma generate",
