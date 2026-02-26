@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Arena Spectator</title>
+    <link rel="stylesheet" href="css/spectator.css" />
+</head>
+<body class="spectator-body">
+    <div class="spectator-shell">
+        <header class="spectator-header">
+            <div class="header-left">
+                <div class="title">AI Arena Spectator</div>
+                <div class="subtitle">Live governance race visualization</div>
+            </div>
+            <div class="header-right">
+                <div id="game-status-badge" class="game-status-slot"></div>
+                <div class="game-id" id="game-id-display">Game: --</div>
+            </div>
+        </header>
+
+        <main class="spectator-layout">
+            <section class="map-panel">
+                <div class="panel-header">
+                    <span>Simulation Map</span>
+                    <span class="panel-meta">Spectator view</span>
+                </div>
+                <div id="map-container" class="map-container">
+                    <div class="map-placeholder">
+                        <div class="map-placeholder-icon">⬣</div>
+                        <div class="map-placeholder-title">Map Loading</div>
+                        <div class="map-placeholder-text">
+                            Waiting for live game state to render checkpoints and agent positions.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="info-panel">
+                <section class="panel leaderboard-panel">
+                    <div class="panel-header">
+                        <span>Leaderboard</span>
+                        <span class="panel-meta">Agents</span>
+                    </div>
+                    <div id="leaderboard-container" class="panel-content">
+                        <div class="empty-state">Leaderboard will populate once the game starts.</div>
+                    </div>
+                </section>
+
+                <section class="panel question-panel">
+                    <div class="panel-header">
+                        <span>Current Question</span>
+                        <span class="panel-meta">Tap to expand on mobile</span>
+                    </div>
+                    <div id="question-display" class="panel-content">
+                        <div class="empty-state">No active question yet.</div>
+                    </div>
+                </section>
+
+                <section class="panel reasoning-panel">
+                    <div class="panel-header">
+                        <span>Agent Reasoning</span>
+                        <span class="panel-meta">Select an agent to view</span>
+                    </div>
+                    <div id="reasoning-panel" class="panel-content">
+                        <div class="empty-state">Reasoning appears after each round.</div>
+                    </div>
+                </section>
+            </aside>
+        </main>
+    </div>
+
+    <div id="loading-overlay" class="overlay hidden">
+        <div class="overlay-card">
+            <div class="overlay-title">Loading Spectator View</div>
+            <div class="overlay-text">Connecting to the arena and waiting for the first state update...</div>
+            <div class="overlay-spinner" aria-hidden="true"></div>
+        </div>
+    </div>
+
+    <div id="connection-overlay" class="overlay hidden">
+        <div class="overlay-card">
+            <div class="overlay-title" id="connection-title">Connecting</div>
+            <div class="overlay-text" id="connection-message">Attempting to reach the game server.</div>
+            <div class="connection-status" id="connection-status">Status: --</div>
+        </div>
+    </div>
+
+    <!-- Socket.io client CDN -->
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script type="module" src="js/spectator.js"></script>
+</body>
+</html>
