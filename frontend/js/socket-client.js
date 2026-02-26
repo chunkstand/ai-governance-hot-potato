@@ -68,7 +68,8 @@ class SocketClient {
             this._emitStateChange();
 
             const options = {
-                transports: ['websocket', 'polling'],
+                // Force polling transport only (no websocket)
+                transports: ['polling'],
                 reconnection: true,
                 reconnectionAttempts: 10, // Max 10 retries per RTC-06
                 reconnectionDelay: 1000, // Initial 1 second (will be randomized 1-3s)
