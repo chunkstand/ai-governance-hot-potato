@@ -1,10 +1,10 @@
 import './socket-client.js';
-import './game-state.js';
 import { MapRenderer } from './map-renderer.js';
+import { Leaderboard } from './leaderboard.js';
+import { QuestionDisplay } from './question-display.js';
+import { ReasoningPanel } from './reasoning-panel.js';
 
 const socketClient = window.socketClient;
-const initGameState = window.initGameState;
-
 let mapRenderer = null;
 
 const ui = {
@@ -14,6 +14,7 @@ const ui = {
     connectionMessage: document.getElementById('connection-message'),
     connectionStatus: document.getElementById('connection-status'),
     gameIdDisplay: document.getElementById('game-id-display'),
+    gameStatusBadge: document.getElementById('game-status-badge'),
 };
 
 const state = {
@@ -39,6 +40,28 @@ function updateGameIdDisplay(gameId) {
     if (ui.gameIdDisplay) {
         ui.gameIdDisplay.textContent = `Game: ${gameId || '--'}`;
     }
+}
+
+function formatGameStatus(status) {
+    const normalized = status || 'INIT';
+    if (['INIT', 'AWAITING_ANSWERS'].includes(normalized)) {
+        return { label: 'Waiting', className: 'waiting' };
+    }
+    if (['PROCESSING', 'RESOLVED'].includes(normalized)) {
+        return { label: 'Playing', className: 'playing' };
+    }
+    if (normalized === 'FINISHED') {
+        return { label: 'Complete', className: 'complete' };
+    }
+    return { label: normalized, className: 'waiting' };
+}
+
+function updateGameStatusBadge(status) {
+    if (!ui.gameStatusBadge) return;
+    const { label, className } = formatGameStatus(status);
+    ui.gameStatusBadge.innerHTML = `
+        <span class="game-status-badge status-${className}">${label}</span>
+    `;
 }
 
 function updateConnectionOverlay(connectionState) {
@@ -95,6 +118,7 @@ function bindSocketEvents() {
         if (data?.gameSession?.id) {
             updateGameIdDisplay(data.gameSession.id);
         }
+        updateGameStatusBadge(data?.gameSession?.status);
     });
 
     socketClient.on('error', (error) => {
@@ -128,11 +152,19 @@ async function connectToGame() {
 function initSpectatorView() {
     bindSocketEvents();
 
-    initGameState({
+    new Leaderboard({
         socketClient,
-        gameStatus: '#game-status-badge',
-        agentsContainer: '#leaderboard-container',
-        currentQuestion: '#question-display',
+        container: '#leaderboard-container'
+    });
+
+    new QuestionDisplay({
+        socketClient,
+        container: '#question-display'
+    });
+
+    new ReasoningPanel({
+        socketClient,
+        container: '#reasoning-panel'
     });
 
     mapRenderer = new MapRenderer({

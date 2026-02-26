@@ -189,6 +189,16 @@ class SocketClient {
                 this._emit('game:decision', data);
             });
 
+            this.socket.on('game:roundEnd', (data) => {
+                console.log('[SocketClient] Round ended:', data);
+                this._emit('game:roundEnd', data);
+            });
+
+            this.socket.on('answer:submitted', (data) => {
+                console.log('[SocketClient] Answer submitted:', data);
+                this._emit('answer:submitted', data);
+            });
+
             // Error handling
             this.socket.on('error', (error) => {
                 console.error('[SocketClient] Socket error:', error);
