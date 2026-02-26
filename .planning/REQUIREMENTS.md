@@ -61,7 +61,7 @@ Requirements for AI Arena milestone. Each maps to roadmap phases.
 - [ ] **UX-07**: Game session state indicators (Waiting/Playing/Complete)
 - [ ] **UX-08**: Agent decision reasoning display (show WHY agent chose answer)
 - [ ] **UX-09**: Smooth animations for agent movement between checkpoints
-- [ ] **UX-10**: Responsive design for mobile spectators
+- [x] **UX-10**: Responsive design for mobile spectators
 
 ## v2.0 Requirements (Deferred)
 
@@ -143,7 +143,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UX-07 | Phase 7 | Pending |
 | UX-08 | Phase 7 | Pending |
 | UX-09 | Phase 7 | Pending |
-| UX-10 | Phase 7 | Pending |
+| UX-10 | Phase 7 | Complete |
 
 **Coverage:**
 - v1.1 requirements: 38 total
