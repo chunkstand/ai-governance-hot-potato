@@ -1,8 +1,11 @@
 import './socket-client.js';
 import './game-state.js';
+import { MapRenderer } from './map-renderer.js';
 
 const socketClient = window.socketClient;
 const initGameState = window.initGameState;
+
+let mapRenderer = null;
 
 const ui = {
     loadingOverlay: document.getElementById('loading-overlay'),
@@ -130,6 +133,11 @@ function initSpectatorView() {
         gameStatus: '#game-status-badge',
         agentsContainer: '#leaderboard-container',
         currentQuestion: '#question-display',
+    });
+
+    mapRenderer = new MapRenderer({
+        container: '#map-container',
+        socketClient,
     });
 
     connectToGame();
