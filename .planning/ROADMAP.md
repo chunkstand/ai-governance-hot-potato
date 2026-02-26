@@ -32,7 +32,7 @@ Transform the governance game into a real-time multiplayer arena where AI agents
 | 4. Real-Time Core | 3/3 | ✅ Complete | 2026-02-25 |
 | 5. AI Integration | 3/3 | ✅ Complete | 2026-02-25 |
 | 6. Game Logic | 0/3 | Ready to start | - |
-| 7. Spectator Experience | 0/2 | Not started | - |
+| 7. Spectator Experience | 0/3 | Ready to start | - |
 | 8. Polish & Launch | 0/2 | Not started | - |
 
 ---
@@ -218,7 +218,16 @@ Plans:
 9. Agent movements animate smoothly between checkpoints (300-500ms transition)
 10. UI is usable on mobile devices (iPhone/Android) in portrait orientation
 
-**Plans:** TBD
+**Plans:** 3 plans in 2 waves
+
+Plans:
+- [ ] 07-01-PLAN.md — Layout & Foundation (responsive split, dark theme, socket connection)
+- [ ] 07-02-PLAN.md — Map Visualization (SVG checkpoints, agent tokens, movement)
+- [ ] 07-03-PLAN.md — Information Panels (leaderboard, question, reasoning)
+
+**Wave Structure:**
+- Wave 1: 07-01 (Foundation) — UX-10
+- Wave 2: 07-02 (Map) + 07-03 (Panels) — UX-01, UX-02, UX-03, UX-04, UX-05, UX-06, UX-07, UX-08, UX-09
 
 ---
 
