@@ -7,6 +7,8 @@ import { healthRouter } from './routes/health';
 import { corsMiddleware } from './middleware/cors';
 import { apiRouter } from './routes/api';
 import { docsRouter } from './routes/docs';
+import { metricsRouter } from './routes/metrics';
+import { metricsMiddleware } from './monitoring';
 import { initializeSocketServer, closeSocketServer } from './socket/index';
 
 // Validate configuration before starting server
@@ -29,6 +31,10 @@ app.use(helmet());
 // Handles preflight OPTIONS and sets CORS headers for GitHub Pages frontend
 app.use(corsMiddleware);
 
+// Prometheus metrics middleware - collects HTTP request metrics
+// Placed after CORS to track all requests
+app.use(metricsMiddleware);
+
 // Compression middleware
 app.use(compression());
 
@@ -48,6 +54,7 @@ app.get('/', (_req: Request, res: Response) => {
 
 // Routes
 app.use('/health', healthRouter);
+app.use('/metrics', metricsRouter);
 app.use('/api', apiRouter);
 app.use('/docs', docsRouter);
 app.use('/openapi.json', docsRouter);
