@@ -77,28 +77,38 @@ async function resolveAgentAnswer(
   }
 
   if (agent.type === 'AI' && aiApiKey) {
-    const currentState = getCurrentState(gameId) as GameState | null;
-    const input: DecisionInput = {
-      promptVersion: PROMPT_VERSION,
-      visibleGameState: (currentState ?? {}) as Record<string, unknown>,
-      question: question.text,
-      options: normalizeQuestionOptions(question),
-      agent: {
-        id: agent.id,
-        name: agent.name,
-        type: agent.type
-      }
-    };
+    try {
+      const currentState = getCurrentState(gameId) as GameState | null;
+      const input: DecisionInput = {
+        promptVersion: PROMPT_VERSION,
+        visibleGameState: (currentState ?? {}) as Record<string, unknown>,
+        question: question.text,
+        options: normalizeQuestionOptions(question),
+        agent: {
+          id: agent.id,
+          name: agent.name,
+          type: agent.type
+        }
+      };
 
-    const start = Date.now();
-    const decision = await generateDecision({
-      gameId,
-      apiKey: aiApiKey,
-      input,
-      deterministic: true
-    });
-    const timeMs = Math.min(Date.now() - start, timeLimit);
-    return { answer: decision.decision.answer, timeMs };
+      const start = Date.now();
+      const decision = await generateDecision({
+        gameId,
+        apiKey: aiApiKey,
+        input,
+        deterministic: true
+      });
+      const timeMs = Math.min(Date.now() - start, timeLimit);
+      return { answer: decision.decision.answer, timeMs };
+    } catch (error) {
+      // AI provider failure - log and return fallback without crashing
+      console.error(`AI decision failed for game ${gameId}, agent ${agent.id}:`, error instanceof Error ? error.message : String(error));
+      // Return deterministic fallback answer based on agent+question hash
+      const fallbackAnswer = ['A', 'B', 'C', 'D'][
+        Math.abs(agent.id.length + question.id.length) % 4
+      ] as AnswerChoice;
+      return { answer: fallbackAnswer, timeMs: timeLimit };
+    }
   }
 
   const fallbackAnswer = ['A', 'B', 'C', 'D'][

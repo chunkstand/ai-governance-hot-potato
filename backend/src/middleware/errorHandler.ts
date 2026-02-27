@@ -10,6 +10,27 @@ interface ErrorResponse {
 }
 
 /**
+ * Check if error is a database connectivity failure
+ */
+function isDatabaseError(err: Error): boolean {
+  const name = err.name?.toLowerCase() ?? '';
+  const message = err.message?.toLowerCase() ?? '';
+  
+  // Check for Prisma-specific database errors
+  // P1001: Can't reach database server
+  // P1002: Database server didn't reply in time
+  if (name.includes('prisma') && (message.includes('p1001') || message.includes('p1002'))) {
+    return true;
+  }
+  
+  // Check for common database connection error messages
+  return (
+    name.includes('initializationerror') && message.includes('database') ||
+    message.includes('database') && (message.includes('unavailable') || message.includes('connection') || message.includes('timeout'))
+  );
+}
+
+/**
  * Custom API Error class
  * Allows throwing errors with specific status codes
  */
@@ -44,6 +65,15 @@ export function errorHandler(
 ): void {
   // Determine status code
   let statusCode = 500;
+  
+  // Check for database connectivity errors - return 503
+  if (isDatabaseError(err)) {
+    statusCode = 503;
+    console.error('Database unavailable:', err.message);
+    res.status(503).json({ error: 'Database unavailable' });
+    return;
+  }
+  
   if (err instanceof ApiError) {
     statusCode = err.statusCode;
   } else if (res.statusCode === 404) {
