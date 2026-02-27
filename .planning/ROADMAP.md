@@ -15,6 +15,8 @@ Transform the governance game into a real-time multiplayer arena where AI agents
 
 ## Phases
 
+- [x] **Phase 1: MVP Launch** — Initial game with governance questions, basic scoring
+- [x] **Phase 2: AEL Framework** — Four-pillar scoring system integration
 - [x] **Phase 3: Foundation** — Backend infrastructure, database, CORS, deployment
 - [x] **Phase 4: Real-Time Core** — Socket.io, rooms, game state machine, connection management
 - [ ] **Phase 5: AI Integration** — OpenAI/Anthropic APIs, rate limiting, caching, circuit breaker
@@ -28,16 +30,38 @@ Transform the governance game into a real-time multiplayer arena where AI agents
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
+| 1. MVP Launch | - | ✅ Complete | 2026-02-23 |
+| 2. AEL Framework | - | ✅ Complete | 2026-02-24 |
 | 3. Foundation | 2/2 | ✅ Complete | 2026-02-24 |
 | 4. Real-Time Core | 3/3 | ✅ Complete | 2026-02-25 |
 | 5. AI Integration | 3/3 | ✅ Complete | 2026-02-25 |
 | 6. Game Logic | 0/3 | Ready to start | - |
 | 7. Spectator Experience | 0/3 | Ready to start | - |
-| 8. Polish & Launch | 0/2 | Not started | - |
+| 8. Polish & Launch | 0/4 | Not started | - |
 
 ---
 
 ## Phase Details
+
+### Phase 1: MVP Launch
+
+**Goal:** Initial playable governance game with basic question/answer flow and scoring.
+
+**Requirements:** (v1.0 - archived)
+
+**Plans:** Completed
+
+---
+
+### Phase 2: AEL Framework
+
+**Goal:** Integration of the four-pillar AEL (Accountability, Expertise, Legitimacy) scoring system.
+
+**Requirements:** (v1.0 - archived)
+
+**Plans:** Completed
+
+---
 
 ### Phase 3: Foundation
 
@@ -248,13 +272,26 @@ Plans:
 6. Error handling covers: AI API failures, database connection loss, WebSocket disconnections
 7. Documentation complete: API reference, deployment guide, troubleshooting runbook
 
-**Plans:** TBD
+**Plans:** 4 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — Prometheus metrics instrumentation + custom AI/WebSocket metrics
+- [ ] 08-02-PLAN.md — Monitoring summary endpoint + alert evaluation
+- [ ] 08-03-PLAN.md — Cached endpoint performance + perf/memory validation scripts
+- [ ] 08-04-PLAN.md — Error handling hardening + deployment/docs deliverables
+
+**Wave Structure:**
+- Wave 1: 08-01 (Metrics instrumentation + /metrics endpoint)
+- Wave 2: 08-02 (Summary endpoint + alert thresholds)
+- Wave 3: 08-03 (Perf + memory validation) + 08-04 (Error handling + docs)
 
 ---
 
 ## Dependencies
 
 ```
+v1.0 (Phases 1-2) — SHIPPED
+    ↓
 Phase 3 (Foundation)
     ↓
 Phase 4 (Real-Time Core) ←────┐
@@ -287,7 +324,7 @@ Phase 8 (Polish & Launch) ←─────── (needs Phase 3, 5, 6, 7)
 
 ## Notes
 
-**Phase Numbering:** Starts at 3 because v1.0 MVP completed Phases 1-2.
+**Phase Numbering:** Includes v1.0 phases 1-2, with v1.1 starting at Phase 3.
 
 **Critical Path:** Phase 3 → Phase 4 → Phase 6 → Phase 7  
 (Without these, no playable game. Phase 5 and Phase 8 have some flexibility.)
