@@ -8,6 +8,7 @@ import { corsMiddleware } from './middleware/cors';
 import { apiRouter } from './routes/api';
 import { docsRouter } from './routes/docs';
 import { metricsRouter } from './routes/metrics';
+import { monitoringRouter } from './routes/monitoring';
 import { metricsMiddleware, startAlertLogging } from './monitoring';
 import { initializeSocketServer, closeSocketServer } from './socket/index';
 import { requestStatsMiddleware } from './monitoring/requestStats';
@@ -59,6 +60,7 @@ app.get('/', (_req: Request, res: Response) => {
 // Routes
 app.use('/health', healthRouter);
 app.use('/metrics', metricsRouter);
+app.use('/monitoring', monitoringRouter);
 app.use('/api', apiRouter);
 app.use('/docs', docsRouter);
 app.use('/openapi.json', docsRouter);
