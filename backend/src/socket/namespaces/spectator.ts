@@ -20,6 +20,29 @@ interface SpectatorSocket extends Socket {
 }
 
 /**
+ * Map raw Socket.io disconnect reasons to normalized set
+ */
+function normalizeDisconnectReason(reason: string): string {
+  const normalized = reason.toLowerCase();
+  if (normalized.includes('ping timeout') || normalized.includes('timeout')) {
+    return 'ping timeout';
+  }
+  if (normalized.includes('server disconnect')) {
+    return 'server disconnect';
+  }
+  if (normalized.includes('client disconnect')) {
+    return 'client disconnect';
+  }
+  if (normalized.includes('transport close')) {
+    return 'transport close';
+  }
+  if (normalized.includes('transport error')) {
+    return 'transport error';
+  }
+  return 'other';
+}
+
+/**
  * Setup the /spectator namespace for viewer connections
  * Handles spectators joining game rooms to watch live updates
  */
@@ -149,9 +172,27 @@ export function setupSpectatorNamespace(io: SocketIOServer): void {
       const roomName = socket.data.roomName;
       const gameId = socket.data.gameId;
       
-      // Log heartbeat status on disconnect
+      // Normalize disconnect reason for operator visibility
+      const normalizedReason = normalizeDisconnectReason(reason);
+      
+      // Log with normalized reason for operator dashboards
       const alive = isAlive(socket);
-      console.log(`👁️  Spectator namespace disconnect: ${socket.id} - ${reason} (heartbeat alive: ${alive})`);
+      console.log(`👁️  Spectator namespace disconnect: ${socket.id} (spectator: ${spectatorId}, reason: ${normalizedReason}, heartbeat alive: ${alive})`);
+      
+      // Emit connection-status event for operator monitoring
+      if (spectatorRoom && roomName && gameId) {
+        const io = socket.nsp?.server;
+        if (io) {
+          io.to(spectatorRoom).emit('connection-status', {
+            socketId: socket.id,
+            type: 'disconnect',
+            reason: normalizedReason,
+            gameId,
+            namespace: '/spectator',
+            timestamp: new Date().toISOString()
+          });
+        }
+      }
       
       if (spectatorRoom && spectatorId && roomName) {
         // Remove spectator from game state

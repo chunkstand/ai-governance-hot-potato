@@ -13,6 +13,29 @@ interface GameSocket extends Socket {
 }
 
 /**
+ * Map raw Socket.io disconnect reasons to normalized set
+ */
+function normalizeDisconnectReason(reason: string): string {
+  const normalized = reason.toLowerCase();
+  if (normalized.includes('ping timeout') || normalized.includes('timeout')) {
+    return 'ping timeout';
+  }
+  if (normalized.includes('server disconnect')) {
+    return 'server disconnect';
+  }
+  if (normalized.includes('client disconnect')) {
+    return 'client disconnect';
+  }
+  if (normalized.includes('transport close')) {
+    return 'transport close';
+  }
+  if (normalized.includes('transport error')) {
+    return 'transport error';
+  }
+  return 'other';
+}
+
+/**
  * Setup the /game namespace for agent connections
  * Handles game logic connections (Phase 6 will add actual game logic)
  */
@@ -86,10 +109,29 @@ export function setupGameNamespace(io: SocketIOServer): void {
     socket.on('disconnect', (reason) => {
       const roomName = socket.data.roomName;
       const agentId = socket.data.agentId;
+      const gameId = socket.data.gameId;
       
-      // Log heartbeat status on disconnect
+      // Normalize disconnect reason for operator visibility
+      const normalizedReason = normalizeDisconnectReason(reason);
+      
+      // Log with normalized reason for operator dashboards
       const alive = isAlive(socket);
-      console.log(`🎮 Game namespace disconnect: ${socket.id} - ${reason} (heartbeat alive: ${alive})`);
+      console.log(`🎮 Game namespace disconnect: ${socket.id} (agent: ${agentId}, reason: ${normalizedReason}, heartbeat alive: ${alive})`);
+      
+      // Emit connection-status event for operator monitoring
+      if (roomName && gameId) {
+        const io = socket.nsp?.server;
+        if (io) {
+          io.to(roomName).emit('connection-status', {
+            socketId: socket.id,
+            type: 'disconnect',
+            reason: normalizedReason,
+            gameId,
+            namespace: '/game',
+            timestamp: new Date().toISOString()
+          });
+        }
+      }
       
       if (roomName && agentId) {
         socket.to(roomName).emit('agent-disconnected', {
