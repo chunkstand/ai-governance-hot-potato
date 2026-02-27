@@ -1,4 +1,5 @@
 import { Server as SocketIOServer, Socket } from 'socket.io';
+import { setWebSocketConnections, recordWebSocketDisconnect } from '../monitoring/metrics';
 
 /**
  * Heartbeat configuration
@@ -30,6 +31,16 @@ const heartbeatMetrics = {
   heartbeatsSent: 0,
   pongsReceived: 0,
 };
+
+/**
+ * Get namespace name from full path
+ * @param nsp - Full namespace path (e.g., "/game")
+ * @returns Short name (e.g., "game")
+ */
+function getNamespaceName(nsp?: string): string {
+  if (!nsp || nsp === '/') return 'unknown';
+  return nsp.replace('/', '');
+}
 
 /**
  * Start heartbeat monitoring on all namespaces
@@ -112,6 +123,10 @@ export function registerSocket(socket: Socket): void {
   heartbeatMetrics.totalConnections++;
   heartbeatMetrics.activeConnections = socketHealth.size;
 
+  // Update Prometheus metrics for active connections
+  const namespace = getNamespaceName(socket.nsp?.name);
+  setWebSocketConnections(namespace, heartbeatMetrics.activeConnections);
+
   console.log(`[Heartbeat] Registered socket ${socket.id} (${socket.nsp?.name || 'unknown namespace'})`);
 
   // Listen for pong response from client
@@ -142,6 +157,11 @@ export function registerSocket(socket: Socket): void {
     
     socketHealth.delete(socket.id);
     heartbeatMetrics.activeConnections = socketHealth.size;
+    
+    // Update Prometheus metrics
+    const namespace = getNamespaceName(socket.nsp?.name);
+    setWebSocketConnections(namespace, heartbeatMetrics.activeConnections);
+    recordWebSocketDisconnect(namespace, reason);
     
     console.log(`[Heartbeat] Unregistered socket ${socket.id} (reason: ${reason})`);
   });

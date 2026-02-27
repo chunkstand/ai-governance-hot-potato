@@ -1,5 +1,6 @@
 import { config } from '../../config';
 import { AIProvider, CostSummary, ProviderUsage, UsageRecord } from './costTypes';
+import { recordAiCost } from '../../monitoring/metrics';
 
 const DEFAULT_DAILY_ALERT_USD = 10;
 const DEFAULT_GAME_CAP_USD = 2;
@@ -66,6 +67,9 @@ export function recordUsage(
     recordedAt: new Date().toISOString(),
     ...normalizedUsage
   });
+
+  // Record cost metrics for Prometheus
+  recordAiCost(provider, costUsd);
 
   const dailyAlertThreshold = getDailyAlertThreshold();
   let dailyAlertTriggered = false;
