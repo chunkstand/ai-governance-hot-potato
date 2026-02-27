@@ -28,7 +28,7 @@ services:
       - key: ANTHROPIC_API_KEY
         sync: false  # Set manually in dashboard
 
-  # Production environment - manual deploy only
+  # Production environment - auto-deploys on main branch pushes
   - type: web
     name: ai-arena-backend-prod
     runtime: node
@@ -36,7 +36,7 @@ services:
     buildCommand: npm install && npm run build && npx prisma migrate deploy && npx prisma generate
     startCommand: npm start
     healthCheckPath: /health
-    autoDeploy: false  # Manual deploy for production safety
+    autoDeploy: true
     envVars:
       - key: NODE_ENV
         value: production

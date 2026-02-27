@@ -184,22 +184,33 @@ CORS_ORIGIN=http://localhost:3000,http://localhost:3001
 
 ### Render (Production)
 
-The `render.yaml` file defines the deployment configuration:
+The backend deploys automatically to Render when you push to the `main` branch:
 
-- **Staging**: Auto-deploys on git push
-- **Production**: Manual deploy via Render dashboard
+- **Staging**: https://ai-arena-backend-staging.onrender.com
+- **Production**: https://ai-arena-backend-prod.onrender.com
 
-See `render.yaml` for service and database configuration.
+See [deployment.md](./docs/deployment.md) for:
+- Render blueprint import steps
+- Environment variable configuration
+- Auto-deploy pipeline behavior
+- Manual rollback procedures
 
-### Environment Variables (Render)
+### Troubleshooting
 
-Set these in the Render dashboard:
+See [troubleshooting.md](./docs/troubleshooting.md) for:
+- Health check failure resolution
+- AI API failure recovery
+- Database connection troubleshooting
+- WebSocket disconnect analysis
+- Common error codes
 
-- `NODE_ENV`: staging or production
-- `DATABASE_URL`: Connection string from Render PostgreSQL
-- `CORS_ORIGIN`: https://chunkstand.github.io
-- `OPENAI_API_KEY`: For AI agent integration (Phase 5)
-- `ANTHROPIC_API_KEY`: For AI agent fallback (Phase 5)
+### API Reference
+
+See [api-reference.md](./docs/api-reference.md) for:
+- REST endpoint documentation
+- WebSocket namespace details
+- Example curl requests
+- Error response formats
 
 ## Project Structure
 
