@@ -17,7 +17,9 @@
     "db:studio": "prisma studio",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "perf:load": "ts-node scripts/loadTest.ts",
+    "perf:memory": "ts-node scripts/memorySoak.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",

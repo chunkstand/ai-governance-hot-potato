@@ -9,6 +9,13 @@ import type {
   GameMode,
   AgentType 
 } from '../types';
+import { 
+  generateCacheKey, 
+  getCachedResponse, 
+  setCachedResponse, 
+  invalidateSessionCache,
+  invalidateCacheByPrefix 
+} from '../lib/requestCache';
 
 const router = Router();
 
@@ -110,6 +117,19 @@ router.get('/sessions', async (req: Request, res: Response, next: NextFunction) 
   try {
     const { status, limit = '10' } = req.query;
 
+    // Generate cache key from query params
+    const cacheKey = generateCacheKey('/api/sessions', { status, limit });
+    
+    // Check cache first
+    const cached = getCachedResponse(cacheKey);
+    if (cached) {
+      res.set('X-Cache', 'HIT');
+      res.json(cached.data);
+      return;
+    }
+
+    res.set('X-Cache', 'MISS');
+
     // Validate status if provided
     if (status && !VALID_STATUSES.includes(status as GameSessionStatus)) {
       res.status(400).json({
@@ -153,6 +173,9 @@ router.get('/sessions', async (req: Request, res: Response, next: NextFunction) 
       createdAt: session.createdAt.toISOString(),
       updatedAt: session.updatedAt.toISOString(),
     }));
+
+    // Cache the response
+    setCachedResponse(cacheKey, summaries);
 
     res.json(summaries);
   } catch (error) {
@@ -202,6 +225,9 @@ router.post('/sessions', async (req: Request, res: Response, next: NextFunction)
       return newSession;
     });
 
+    // Invalidate list cache on write
+    invalidateCacheByPrefix('/api/sessions');
+
     // Transform and return
     res.status(201).json(transformGameSession(session));
   } catch (error) {
@@ -225,6 +251,17 @@ router.get('/sessions/:id', async (req: Request, res: Response, next: NextFuncti
       return;
     }
 
+    // Check cache first
+    const cacheKey = generateCacheKey(`/api/sessions/${id}`);
+    const cached = getCachedResponse(cacheKey);
+    if (cached) {
+      res.set('X-Cache', 'HIT');
+      res.json(cached.data);
+      return;
+    }
+
+    res.set('X-Cache', 'MISS');
+
     // Query session
     const session = await prisma.gameSession.findUnique({
       where: { id },
@@ -246,7 +283,12 @@ router.get('/sessions/:id', async (req: Request, res: Response, next: NextFuncti
       return;
     }
 
-    res.json(transformGameSession(session));
+    const transformed = transformGameSession(session);
+    
+    // Cache the response
+    setCachedResponse(cacheKey, transformed);
+
+    res.json(transformed);
   } catch (error) {
     next(error);
   }
@@ -284,6 +326,9 @@ router.delete('/sessions/:id', async (req: Request, res: Response, next: NextFun
     await prisma.gameSession.delete({
       where: { id },
     });
+
+    // Invalidate related caches
+    invalidateSessionCache(id);
 
     res.status(204).send();
   } catch (error) {
@@ -343,6 +388,9 @@ router.post('/sessions/:id/start', async (req: Request, res: Response, next: Nex
       include: { agents: true },
     });
 
+    // Invalidate session cache after status change
+    invalidateSessionCache(id);
+
     res.json(transformGameSession(updatedSession));
   } catch (error) {
     next(error);
@@ -365,6 +413,17 @@ router.get('/sessions/:id/agents', async (req: Request, res: Response, next: Nex
       return;
     }
 
+    // Check cache first
+    const cacheKey = generateCacheKey(`/api/sessions/${id}/agents`);
+    const cached = getCachedResponse(cacheKey);
+    if (cached) {
+      res.set('X-Cache', 'HIT');
+      res.json(cached.data);
+      return;
+    }
+
+    res.set('X-Cache', 'MISS');
+
     // Check if session exists
     const session = await prisma.gameSession.findUnique({
       where: { id },
@@ -386,7 +445,12 @@ router.get('/sessions/:id/agents', async (req: Request, res: Response, next: Nex
       },
     });
 
-    res.json(agents.map(transformAgent));
+    const transformed = agents.map(transformAgent);
+    
+    // Cache the response
+    setCachedResponse(cacheKey, transformed);
+
+    res.json(transformed);
   } catch (error) {
     next(error);
   }
