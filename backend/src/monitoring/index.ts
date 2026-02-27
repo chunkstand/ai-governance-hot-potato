@@ -1,5 +1,9 @@
 import promClient from 'prom-client';
 import { Request, Response } from 'express';
+import { getAlerts, startAlertLogging } from './alerts';
+
+// Re-export alert functions
+export { getAlerts, startAlertLogging };
 
 // Type declaration for express-prometheus-middleware
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -71,4 +75,6 @@ export default {
   registry,
   metricsMiddleware,
   getRegistry,
+  startAlertLogging,
+  getAlerts,
 };

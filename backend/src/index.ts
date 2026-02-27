@@ -8,8 +8,9 @@ import { corsMiddleware } from './middleware/cors';
 import { apiRouter } from './routes/api';
 import { docsRouter } from './routes/docs';
 import { metricsRouter } from './routes/metrics';
-import { metricsMiddleware } from './monitoring';
+import { metricsMiddleware, startAlertLogging } from './monitoring';
 import { initializeSocketServer, closeSocketServer } from './socket/index';
+import { requestStatsMiddleware } from './monitoring/requestStats';
 
 // Validate configuration before starting server
 // This implements fail-fast behavior - server refuses to start with invalid config
@@ -34,6 +35,9 @@ app.use(corsMiddleware);
 // Prometheus metrics middleware - collects HTTP request metrics
 // Placed after CORS to track all requests
 app.use(metricsMiddleware);
+
+// Request stats middleware - tracks per-request latency and status codes
+app.use(requestStatsMiddleware);
 
 // Compression middleware
 app.use(compression());
@@ -76,6 +80,9 @@ const server = app.listen(config.port, () => {
 
 // Initialize Socket.io server
 initializeSocketServer(server);
+
+// Start alert logging (every 60 seconds)
+startAlertLogging(60000);
 
 // Graceful shutdown handler
 const gracefulShutdown = async (signal: string) => {
