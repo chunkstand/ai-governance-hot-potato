@@ -730,11 +730,6 @@ function addDemoAgent(type) {
 function addAllDemoAgents() {
     ['strict', 'lenient', 'random', 'balanced'].forEach(type => addDemoAgent(type));
 }
-}
-
-function addAllDemoAgents() {
-    ['strict', 'lenient', 'random'].forEach(type => addDemoAgent(type));
-}
 
 function removeAgent(id) {
     gameState.agents = gameState.agents.filter(a => a.id !== id);
