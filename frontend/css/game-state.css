@@ -1,6 +1,6 @@
 /**
  * Game State UI Styles
- * Agent cards, question display, round info
+ * Agent cards, question display, round info - Dark Mode Theme
  */
 
 /* ============================================
@@ -27,40 +27,40 @@
 }
 
 .status-init {
-    background: #e9ecef;
-    color: #495057;
+    background: rgba(100, 116, 139, 0.2);
+    color: #94a3b8;
 }
-.status-init::before { background: #6c757d; }
+.status-init::before { background: #64748b; }
 
 .status-awaiting-answers {
-    background: #fff3cd;
-    color: #856404;
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
 }
 .status-awaiting-answers::before { 
-    background: #ffc107;
+    background: #f59e0b;
     animation: pulse-yellow 1s infinite;
 }
 
 .status-processing {
-    background: #d1ecf1;
-    color: #0c5460;
+    background: rgba(99, 102, 241, 0.15);
+    color: #818cf8;
 }
 .status-processing::before { 
-    background: #17a2b8;
+    background: #6366f1;
     animation: pulse-blue 1s infinite;
 }
 
 .status-resolved {
-    background: #d4edda;
-    color: #155724;
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
 }
-.status-resolved::before { background: #28a745; }
+.status-resolved::before { background: #10b981; }
 
 .status-finished {
-    background: #f8d7da;
-    color: #721c24;
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
 }
-.status-finished::before { background: #dc3545; }
+.status-finished::before { background: #ef4444; }
 
 @keyframes pulse-blue {
     0%, 100% { opacity: 1; }
@@ -82,26 +82,27 @@
     align-items: center;
     gap: 12px;
     padding: 14px 16px;
-    background: white;
-    border-radius: 10px;
-    border-left: 4px solid;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background: #1e293b;
+    border-radius: 12px;
+    border-left: 4px solid #6366f1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
 }
 
 .agent-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .agent-card.agent-leader {
-    background: linear-gradient(135deg, #fff9e6 0%, #fff 100%);
-    box-shadow: 0 2px 12px rgba(255, 193, 7, 0.2);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, #1e293b 100%);
+    border-left-color: #f59e0b;
+    box-shadow: 0 2px 12px rgba(245, 158, 11, 0.2);
 }
 
 .agent-card.agent-leader .agent-rank {
-    background: #ffc107;
-    color: #333;
+    background: #f59e0b;
+    color: #0f172a;
 }
 
 .agent-card.agent-disconnected {
@@ -112,14 +113,14 @@
 .agent-rank {
     width: 32px;
     height: 32px;
-    background: #e9ecef;
+    background: #334155;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 13px;
     font-weight: 700;
-    color: #495057;
+    color: #94a3b8;
     flex-shrink: 0;
 }
 
@@ -131,7 +132,7 @@
 .agent-name {
     font-size: 15px;
     font-weight: 600;
-    color: #333;
+    color: #f1f5f9;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -146,17 +147,17 @@
 }
 
 .agent-connection-status.online {
-    background: #28a745;
-    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+    background: #10b981;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
 }
 
 .agent-connection-status.offline {
-    background: #dc3545;
+    background: #ef4444;
 }
 
 .agent-type {
     font-size: 12px;
-    color: #6c757d;
+    color: #64748b;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -176,13 +177,13 @@
 .stat-value {
     font-size: 20px;
     font-weight: 700;
-    color: #333;
+    color: #f1f5f9;
     line-height: 1;
 }
 
 .stat-label {
     font-size: 10px;
-    color: #6c757d;
+    color: #64748b;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-top: 2px;
@@ -190,7 +191,7 @@
 
 .no-agents {
     text-align: center;
-    color: #6c757d;
+    color: #64748b;
     padding: 40px 20px;
     font-style: italic;
 }
@@ -204,20 +205,21 @@
 }
 
 .question-card {
-    background: white;
+    background: #1e293b;
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border: 1px solid #334155;
 }
 
 .question-text {
     font-size: 16px;
     font-weight: 500;
-    color: #333;
+    color: #f1f5f9;
     line-height: 1.5;
     margin-bottom: 16px;
     padding-bottom: 16px;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid #334155;
 }
 
 .question-options {
@@ -231,19 +233,21 @@
     align-items: center;
     gap: 12px;
     padding: 12px 16px;
-    background: #f8f9fa;
+    background: #0f172a;
     border-radius: 8px;
     transition: all 0.2s ease;
+    border: 1px solid transparent;
 }
 
 .question-option:hover {
-    background: #e9ecef;
+    background: #334155;
+    border-color: #475569;
 }
 
 .option-letter {
     width: 28px;
     height: 28px;
-    background: #007bff;
+    background: linear-gradient(135deg, #6366f1, #818cf8);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -256,15 +260,15 @@
 
 .option-text {
     font-size: 14px;
-    color: #495057;
+    color: #cbd5e1;
 }
 
 .no-question {
     text-align: center;
-    color: #6c757d;
+    color: #64748b;
     padding: 30px 20px;
     font-style: italic;
-    background: #f8f9fa;
+    background: #0f172a;
     border-radius: 8px;
 }
 
@@ -277,10 +281,11 @@
     align-items: center;
     gap: 6px;
     padding: 8px 16px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
     color: white;
     border-radius: 20px;
     font-weight: 600;
+    box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
 }
 
 .round-label {
@@ -300,10 +305,11 @@
    ============================================ */
 
 .game-state-panel {
-    background: #f8f9fa;
+    background: #1e293b;
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 20px;
+    border: 1px solid #334155;
 }
 
 .game-state-header {
@@ -312,13 +318,13 @@
     align-items: center;
     margin-bottom: 16px;
     padding-bottom: 12px;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid #334155;
 }
 
 .game-state-title {
     font-size: 18px;
     font-weight: 600;
-    color: #333;
+    color: #f1f5f9;
     margin: 0;
 }
 

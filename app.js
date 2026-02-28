@@ -44,8 +44,7 @@ const AGENT_TYPES = {
     strict: { name: "StrictBot", description: "Conservative - prefers DENY" },
     lenient: { name: "LenientBot", description: "Optimistic - prefers APPROVE" },
     random: { name: "RandomBot", description: "Random choice" },
-    balanced: { name: "BalancedBot", description: "Uses AEL framework" },
-    human: { name: "Human", description: "Human player" }
+    balanced: { name: "BalancedBot", description: "Uses AEL framework" }
 };
 
 // ==================== GAME STATE ====================
@@ -696,7 +695,7 @@ function handleAgentRegistration(e) {
     
     elements.agentName.value = '';
     elements.agentWebhook.value = '';
-    elements.agentType.value = 'human';
+    elements.agentType.value = 'strict';
     
     console.log(`Agent added: ${name} (${type})`);
     
