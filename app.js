@@ -1,4 +1,4 @@
-// AI Governance Hot Potato - Game Logic with AEL Framework
+// Agent Gameworks - Game Logic with AEL Framework
 
 // ==================== GAME DATA ====================
 
@@ -161,7 +161,7 @@ function init() {
     renderAgentsList();
     renderHistory();
     updateImpactVisualization();
-    console.log('🤖 AI Governance Hot Potato with AEL Framework initialized');
+    console.log('🤖 Agent Gameworks with AEL Framework initialized');
     console.log('Game state loaded from localStorage');
 }
 
