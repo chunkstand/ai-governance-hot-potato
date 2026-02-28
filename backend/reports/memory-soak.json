@@ -1,0 +1,60 @@
+{
+  "config": {
+    "baseUrl": "http://localhost:3000",
+    "durationMin": 1,
+    "sampleIntervalSec": 10,
+    "growthThreshold": 15
+  },
+  "samples": [
+    {
+      "timestamp": "2026-02-27T23:39:34.959Z",
+      "heapUsed": 36517952,
+      "heapTotal": 52887552,
+      "rss": 142786560,
+      "external": 7897387
+    },
+    {
+      "timestamp": "2026-02-27T23:39:44.956Z",
+      "heapUsed": 36839128,
+      "heapTotal": 53149696,
+      "rss": 142999552,
+      "external": 7902034
+    },
+    {
+      "timestamp": "2026-02-27T23:39:54.957Z",
+      "heapUsed": 37070000,
+      "heapTotal": 53149696,
+      "rss": 123420672,
+      "external": 7906681
+    },
+    {
+      "timestamp": "2026-02-27T23:40:04.957Z",
+      "heapUsed": 37425488,
+      "heapTotal": 53411840,
+      "rss": 114556928,
+      "external": 7911328
+    },
+    {
+      "timestamp": "2026-02-27T23:40:14.954Z",
+      "heapUsed": 37660824,
+      "heapTotal": 53411840,
+      "rss": 114655232,
+      "external": 7915975
+    },
+    {
+      "timestamp": "2026-02-27T23:40:24.956Z",
+      "heapUsed": 26473400,
+      "heapTotal": 29605888,
+      "rss": 88358912,
+      "external": 7897387
+    }
+  ],
+  "summary": {
+    "initialHeapUsed": 26473400,
+    "finalHeapUsed": 26473400,
+    "heapGrowthPercent": 0,
+    "leakDetected": false,
+    "sampleCount": 6,
+    "durationMs": 60002
+  }
+}

@@ -21,7 +21,7 @@ export function initializeSocketServer(httpServer: HttpServer): SocketIOServer {
     cors: {
       origin: config.socketCorsOrigin,
       methods: ['GET', 'POST'],
-      credentials: true
+      credentials: false  // Disabled - not needed for this app (no cookies over WebSocket)
     },
     pingTimeout: 60000,
     pingInterval: 30000,

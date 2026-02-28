@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-02-27T23:38:21.004Z",
+  "config": {
+    "baseUrl": "http://localhost:3000",
+    "endpoints": [
+      "/api/sessions"
+    ],
+    "totalRequests": 200,
+    "concurrency": 10
+  },
+  "results": [
+    {
+      "endpoint": "/api/sessions",
+      "metrics": {
+        "min": 0,
+        "max": 0,
+        "mean": 0,
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errorCount": 200,
+      "errorRate": 100
+    }
+  ],
+  "totalDuration": 112
+}
